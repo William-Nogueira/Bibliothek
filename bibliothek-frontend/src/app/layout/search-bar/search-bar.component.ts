@@ -1,27 +1,42 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-search-bar',
-  templateUrl: './search-bar.component.html',
+  template: `<form class="search-bar">
+    <input
+      class="bar"
+      type="text"
+      [(ngModel)]="searchQuery"
+      name="titulo"
+      [placeholder]="'SEARCH.PLACEHOLDER' | translate"
+      (keyup.enter)="search()"
+    />
+    <button class="search-btn" type="button" (click)="search()">
+      {{ 'SEARCH.BUTTON' | translate }}
+    </button>
+  </form> `,
   styleUrls: ['./search-bar.component.css'],
 })
-export class BarraBuscaComponent {
+export class SearchBarComponent {
   searchQuery: string = '';
 
   constructor(
-    private router: Router,
+    private readonly router: Router,
+    private readonly translate: TranslateService
   ) {}
 
-  realizarBusca(): void {
+  search(): void {
     const trimmedQuery = this.searchQuery.trim();
     if (trimmedQuery.length < 3) {
-      const errorMessage =
-        'Você precisa digitar no mínimo uma palavra com 3 ou mais caracteres válidos para realizar a busca.';
-      window.alert(errorMessage);
+      const errorMsg = this.translate.instant('SEARCH.ERROR_MIN_LENGTH');
+      globalThis.alert(errorMsg);
       return;
     }
 
-    this.router.navigate(['/platform'], { queryParams: { query: trimmedQuery } });
+    this.router.navigate(['/platform'], {
+      queryParams: { query: trimmedQuery },
+    });
   }
 }

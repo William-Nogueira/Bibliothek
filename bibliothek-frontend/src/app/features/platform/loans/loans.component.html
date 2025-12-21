@@ -1,57 +1,135 @@
 <main>
-    <app-navbar></app-navbar>
-    <div class="padding-bottom"></div>
-    <article class="container">
-        <div id="informacoes">
-            <div class="info">
-                <h3 class="info-header">Empréstimos</h3>
-                <div class="lista-livros container2" id="anchor">
-                    <div class="lista-livro-header">
-                        <p class="header-titulo">Título</p>
-                        <p class="header-info">Nome do Usuário</p>
-                        <p class="header-info">Data da requisição</p>
-                        <p class="header-info">Data do empréstimo</p>
-                        <p class="header-info">Data limite</p>
-                        <p class="header-info">Multa</p>
-                        <p class="header-info">Situação</p>
-                        <p class="header-detalhes">Gerenciar Empréstimos</p>
-                        <p class="header-detalhes">Renovar Empréstimos</p>
-                    </div>
-                    <a class="lista-livro-link" *ngFor="let emprestimo of emprestimos">
-                        <div class="img-titulo">
-                            <img class="lista-livro-img" [src]="emprestimo.livro.imagemUrl"
-                                alt="{{ emprestimo.livro.titulo }}" />
-                            <div>
-                                <h4 class="lista-livro-titulo">{{ emprestimo.livro.titulo }}</h4>
-                                <p class="lista-livro-autor">{{ emprestimo.livro.autor }}</p>
-                            </div>
-                        </div>
-                        <p class="lista-livro-info">{{ emprestimo.usuario.nomeCompleto }}</p>
-                        <p class="lista-livro-info">{{ emprestimo.dataRequisicao | date:'dd/MM/yyyy' }}</p>
-                        <p class="lista-livro-info">{{ emprestimo.dataEmprestimo | date:'dd/MM/yyyy' }}</p>
-                        <p class="lista-livro-info">{{ emprestimo.dataEntrega | date:'dd/MM/yyyy' }}</p>
-                        <p class="lista-livro-info">R$ {{ emprestimo.multa }}.00</p>
-                        <p class="lista-livro-info">{{ emprestimo.status }}</p>
-                        <button *ngIf="emprestimo.status === 'Pendente'"
-                            (click)="aprovarEmprestimo(emprestimo.codEmprestimo)">Aprovar</button>
-                        <button *ngIf="emprestimo.status === 'Pendente'" disabled>Renovar</button>
-                        <button *ngIf="emprestimo.status === 'Emprestado'"
-                            (click)="finalizarEmprestimo(emprestimo.codEmprestimo)">Finalizar</button>
-                        <button *ngIf="emprestimo.status === 'Finalizado'" disabled>Finalizado</button>
-                        <button *ngIf="emprestimo.status === 'Finalizado'"
-                            (click)="renovarEmprestimo(emprestimo.codEmprestimo)" disabled>Renovar</button>
-                        <button *ngIf="emprestimo.status === 'Renovado'"
-                            (click)="finalizarEmprestimo(emprestimo.codEmprestimo)">Finalizar</button>
-                        <button *ngIf="emprestimo.status === 'Emprestado'"
-                            (click)="renovarEmprestimo(emprestimo.codEmprestimo)">Renovar</button>
-                        <button *ngIf="emprestimo.status === 'Renovado'" disabled>Renovar</button>
-                    </a>
-                </div>
-                <div class="message" [class.sucesso]="messageSuccess" [class.erro]="messageError">
-                    <h3>{{ message }}</h3>
-                </div>
+  <app-navbar></app-navbar>
+  <div class="padding-bottom"></div>
+  <article class="container">
+    <div id="informacoes">
+      <div class="info">
+        <h3 class="info-header">{{ "LOANS.TITLE" | translate }}</h3>
+
+        <h2 *ngIf="loading" class="info-header" style="text-align: center">
+          {{ "BOOKS.LIST.LOADING" | translate }}
+        </h2>
+
+        <div *ngIf="!loading && loans.length > 0" class="loan-list-container">
+          <div class="list-header">
+            <p class="col-title">{{ "LOANS.TABLE.TITLE" | translate }}</p>
+            <p class="col-info">{{ "LOANS.TABLE.USER" | translate }}</p>
+            <p class="col-date">{{ "LOANS.TABLE.REQUESTED" | translate }}</p>
+            <p class="col-date">{{ "LOANS.TABLE.BORROWED" | translate }}</p>
+            <p class="col-date">{{ "LOANS.TABLE.DUE" | translate }}</p>
+            <p class="col-money">{{ "LOANS.TABLE.FINE" | translate }}</p>
+            <p class="col-status">{{ "LOANS.TABLE.STATUS" | translate }}</p>
+            <p class="col-actions">{{ "LOANS.TABLE.ACTIONS" | translate }}</p>
+            <p class="col-renew">{{ "LOANS.BUTTONS.RENEW" | translate }}</p>
+          </div>
+
+          <div class="list-item" *ngFor="let loan of loans">
+            <div class="col-title">
+              <h4 class="loan-title">{{ loan.bookTitle }}</h4>
             </div>
+
+            <p class="col-info">{{ loan.userName }}</p>
+
+            <p class="col-date">{{ loan.requestDate | date : "dd/MM/yyyy" }}</p>
+            <p class="col-date">
+              {{ loan.loanDate ? (loan.loanDate | date : "dd/MM/yyyy") : "-" }}
+            </p>
+            <p class="col-date">
+              {{
+                loan.returnDate ? (loan.returnDate | date : "dd/MM/yyyy") : "-"
+              }}
+            </p>
+
+            <p class="col-money">R$ {{ loan.fine | number : "1.2-2" }}</p>
+
+            <p class="col-status">
+              <span class="status-badge" [ngClass]="loan.status.toLowerCase()">
+                {{ "LOANS.STATUS." + loan.status | translate }}
+              </span>
+            </p>
+
+            <div class="col-actions">
+              <ng-container [ngSwitch]="loan.status">
+                <button
+                  *ngSwitchCase="'PENDING'"
+                  class="btn-action approve"
+                  (click)="approveLoan(loan.id)"
+                >
+                  {{ "LOANS.BUTTONS.APPROVE" | translate }}
+                </button>
+
+                <button
+                  *ngSwitchCase="'ACTIVE'"
+                  class="btn-action finish"
+                  (click)="finishLoan(loan.id)"
+                >
+                  {{ "LOANS.BUTTONS.FINISH" | translate }}
+                </button>
+
+                <button
+                  *ngSwitchCase="'RENEWED'"
+                  class="btn-action finish"
+                  (click)="finishLoan(loan.id)"
+                >
+                  {{ "LOANS.BUTTONS.FINISH" | translate }}
+                </button>
+
+                <button *ngSwitchCase="'FINISHED'" class="btn-action" disabled>
+                  {{ "LOANS.BUTTONS.DONE" | translate }}
+                </button>
+              </ng-container>
+            </div>
+
+            <div class="col-renew">
+              <button
+                class="btn-action renew"
+                (click)="renewLoan(loan.id)"
+                [disabled]="loan.status !== 'ACTIVE'"
+              >
+                {{ "LOANS.BUTTONS.RENEW" | translate }}
+              </button>
+            </div>
+          </div>
+
+          <div class="pagination">
+            <button
+              class="button-page"
+              (click)="prevPage()"
+              [disabled]="currentPage === 0"
+            >
+              {{ "BOOKS.BUTTONS.PREVIOUS" | translate }}
+            </button>
+
+            <span>
+              {{ "BOOKS.LIST.PAGE" | translate }} {{ currentPage + 1 }}
+              {{ "BOOKS.LIST.OF" | translate }} {{ totalPages }}
+            </span>
+
+            <button
+              class="button-page"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages - 1"
+            >
+              {{ "BOOKS.BUTTONS.NEXT" | translate }}
+            </button>
+          </div>
         </div>
-    </article>
+
+        <h2 *ngIf="!loading && loans.length === 0" class="no-data">
+          {{ "BOOKS.LIST.NO_RESULTS" | translate }}
+        </h2>
+
+        <div
+          class="message"
+          [class.success]="messageSuccess"
+          [class.error]="messageError"
+          *ngIf="message"
+        >
+          <h3>{{ message | translate }}</h3>
+        </div>
+      </div>
+    </div>
+  </article>
 </main>
 <app-footer></app-footer>
+<loading-spinner [visible]="loading"></loading-spinner>

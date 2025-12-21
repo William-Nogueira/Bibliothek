@@ -1,0 +1,89 @@
+<main>
+  <div class="padding-bottom">
+    <app-navbar></app-navbar>
+    <app-search-bar></app-search-bar>
+  </div>
+
+  <article class="container" *ngIf="showInfo">
+    <nav class="breadcrumb">
+      <a class="purple" routerLink="/platform">{{
+        "BOOK_DETAILS.HOME" | translate
+      }}</a>
+      <span class="gray"> / </span>
+      <span>{{ book?.title }}</span>
+    </nav>
+    <div class="flex">
+      <figure class="placeholder">
+        <img class="photo" [src]="book?.coverImage" [alt]="book?.title" />
+      </figure>
+      <section class="section">
+        <div>
+          <h2 class="title">{{ book?.title }}</h2>
+          <p class="author">{{ book?.author }}</p>
+          <p class="description">{{ book?.description }}</p>
+        </div>
+        <div class="info-container">
+          <div class="info" *ngIf="isAdmin()">
+            <h3 class="info-header">{{ "BOOK_DETAILS.STOCK" | translate }}</h3>
+            <p class="info-details">{{ book?.stock }}</p>
+          </div>
+          <div class="info">
+            <h3 class="info-header">
+              {{ "BOOK_DETAILS.AVAILABLE" | translate }}
+            </h3>
+            <p class="info-details">{{ book?.availableStock }}</p>
+          </div>
+          <div class="info">
+            <h3 class="info-header">
+              {{ "BOOK_DETAILS.PUBLISHER" | translate }}
+            </h3>
+            <p class="info-details">{{ book?.publisher }}</p>
+          </div>
+          <div class="info">
+            <h3 class="info-header">{{ "BOOK_DETAILS.GENRE" | translate }}</h3>
+            <p class="info-details">{{ book?.genre }}</p>
+          </div>
+        </div>
+        <div class="button-div">
+          <button
+            class="button"
+            (click)="requestLoan(book?.id || '')"
+            [disabled]="isButtonDisabled"
+          >
+            {{ "BOOK_DETAILS.REQUEST_LOAN" | translate }}
+          </button>
+
+          <ng-container *ngIf="isAdmin()">
+            <button class="button" (click)="showEditMode(true)">
+              {{ "BOOK_DETAILS.EDIT" | translate }}
+            </button>
+            <button class="button delete-btn" (click)="deleteBook()">
+              {{ "BOOK_DETAILS.DELETE" | translate }}
+            </button>
+          </ng-container>
+        </div>
+        <div
+          class="message"
+          [class.success]="messageSuccess"
+          [class.error]="messageError"
+          *ngIf="message"
+        >
+          <h3>{{ message | translate }}</h3>
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <article class="edit-container" *ngIf="showEdit">
+    <app-book-form
+      [bookToEdit]="book"
+      (saveEvent)="onBookSaved()"
+      (cancelEvent)="showEditMode(false)"
+    >
+    </app-book-form>
+  </article>
+
+  <app-recommendations [openBook]="book"></app-recommendations>
+</main>
+<app-footer></app-footer>
+<loading-spinner [visible]="loading"></loading-spinner>

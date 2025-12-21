@@ -4,6 +4,8 @@ import dev.williamnogueira.bibliothek.domain.user.UserEntity;
 import dev.williamnogueira.bibliothek.domain.book.BookEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity(name = "Loan")
@@ -35,20 +37,24 @@ public class LoanEntity {
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
-    private BookEntity bookEntity;
+    private BookEntity book;
 
     @ManyToOne
     @JoinColumn(name = "user_registration", nullable = false)
     private UserEntity user;
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private LoanStatus status;
 
-    @Column(columnDefinition = "DATE", nullable = false)
-    private LocalDateTime loanDate;
+    @Column(nullable = false)
+    private Instant requestDate;
 
-    @Column(columnDefinition = "DATE")
-    private LocalDateTime returnDate;
+    @Column
+    private Instant loanDate;
+
+    @Column
+    private Instant returnDate;
 
     @Column(nullable = false)
     private BigDecimal fine;

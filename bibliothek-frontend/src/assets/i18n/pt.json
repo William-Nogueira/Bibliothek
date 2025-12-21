@@ -1,0 +1,223 @@
+{
+  "BOOKS": {
+    "LIST": {
+      "LOADING": "Carregando...",
+      "NO_RESULTS": "Nenhum livro foi encontrado",
+      "PAGE": "Página",
+      "OF": "de"
+    },
+    "TABLE": {
+      "TITLE": "Título",
+      "PUBLISHER": "Editora",
+      "GENRE": "Gênero",
+      "DETAILS": "Detalhes"
+    },
+    "BUTTONS": {
+      "MORE_DETAILS": "Mais Detalhes",
+      "PREVIOUS": "Anterior",
+      "NEXT": "Próxima"
+    }
+  },
+  "BOOK_DETAILS": {
+    "HOME": "Início",
+    "STOCK": "Estoque",
+    "AVAILABLE": "Disponível",
+    "PUBLISHER": "Editora",
+    "GENRE": "Gênero",
+    "REQUEST_LOAN": "Solicitar Empréstimo",
+    "EDIT": "Editar Livro",
+    "DELETE": "Apagar Livro",
+    "EDIT_TITLE": "Editar: {{title}}",
+    "LABELS": {
+      "TITLE": "Título do Livro",
+      "GENRE": "Gênero",
+      "AUTHOR": "Autor",
+      "PUBLISHER": "Editora",
+      "STOCK": "Quantidade em Estoque",
+      "IMAGE": "Url da Imagem",
+      "FEATURED": "Em Destaque",
+      "DESCRIPTION": "Sinopse"
+    },
+    "BUTTONS": {
+      "CANCEL": "Cancelar",
+      "SAVE": "Salvar Alterações"
+    },
+    "MESSAGES": {
+      "LOAN_SUCCESS": "Livro agendado com sucesso!",
+      "LOAN_ERROR": "Erro ao agendar livro. Verifique se você já possui este livro.",
+      "EDIT_SUCCESS": "Livro editado com sucesso!",
+      "EDIT_ERROR": "Erro ao editar livro.",
+      "DELETE_CONFIRM": "Tem certeza de que deseja apagar este livro?",
+      "DELETE_ERROR": "Erro ao apagar o livro.",
+      "LOAN_CONFIRM": "Tem certeza de que deseja agendar este livro?"
+    }
+  },
+  "NEW_BOOK": {
+    "TITLE": "Cadastrar Livro",
+    "LABELS": {
+      "TITLE": "Título do Livro",
+      "GENRE": "Gênero",
+      "AUTHOR": "Autor",
+      "PUBLISHER": "Editora",
+      "STOCK": "Quantidade em Estoque",
+      "IMAGE_URL": "URL da Imagem de Capa",
+      "FEATURED": "Livro em Destaque",
+      "DESCRIPTION": "Sinopse"
+    },
+    "PLACEHOLDERS": {
+      "TITLE": "Digite o título do livro",
+      "GENRE": "Digite o gênero",
+      "AUTHOR": "Digite o nome do autor",
+      "PUBLISHER": "Digite a editora",
+      "STOCK": "Digite a quantidade",
+      "IMAGE_URL": "Ex: https://exemplo.com/capa.jpg",
+      "DESCRIPTION": "Escreva a sinopse do livro aqui..."
+    },
+    "BUTTONS": {
+      "REGISTER": "Cadastrar Livro"
+    },
+    "MESSAGES": {
+      "SUCCESS": "Livro cadastrado com sucesso!",
+      "ERROR": "Erro ao cadastrar livro."
+    },
+    "ERROR": {
+      "TITLE_REQUIRED": "O título é obrigatório.",
+      "GENRE_REQUIRED": "O gênero é obrigatório.",
+      "AUTHOR_REQUIRED": "O autor é obrigatório.",
+      "PUBLISHER_REQUIRED": "A editora é obrigatória.",
+      "STOCK_POSITIVE": "O estoque deve ser um número positivo.",
+      "URL_VALID": "Uma URL válida é obrigatória.",
+      "DESCRIPTION_REQUIRED": "A sinopse é obrigatória."
+    }
+  },
+  "NAV": {
+    "BOOKS": "Livros",
+    "ADMIN_MENU": "Menu Admin",
+    "LOANS": "Empréstimos",
+    "REGISTER_BOOK": "Cadastrar Livro",
+    "REGISTER_USER": "Cadastrar Usuário",
+    "LOGOUT": "Sair"
+  },
+  "LOGIN": {
+    "TITLE": "Faça login na sua conta",
+    "REGISTRATION_PLACEHOLDER": "Matrícula",
+    "PASSWORD_PLACEHOLDER": "Senha",
+    "BUTTON": "Entrar",
+    "FORGOT": "Esqueceu sua senha?",
+    "ERROR_INVALID": "Matrícula ou senha inválida.",
+    "ERROR_UNEXPECTED": "Ocorreu um erro inesperado."
+  },
+  "LOANS": {
+    "TITLE": "Empréstimos",
+    "TABLE": {
+      "TITLE": "Título",
+      "USER": "Usuário",
+      "REQUESTED": "Solicitado",
+      "BORROWED": "Emprestado",
+      "DUE": "Devolução",
+      "FINE": "Multa",
+      "STATUS": "Status",
+      "ACTIONS": "Ações"
+    },
+    "STATUS": {
+      "PENDING": "Pendente",
+      "ACTIVE": "Ativo",
+      "RENEWED": "Renovado",
+      "FINISHED": "Finalizado"
+    },
+    "BUTTONS": {
+      "APPROVE": "Aprovar",
+      "FINISH": "Finalizar",
+      "RENEW": "Renovar",
+      "DONE": "Concluído"
+    },
+    "MESSAGES": {
+      "APPROVE_SUCCESS": "Livro aprovado com sucesso!",
+      "APPROVE_ERROR": "Erro ao aprovar livro.",
+      "FINISH_SUCCESS": "Livro finalizado com sucesso!",
+      "FINISH_ERROR": "Erro ao finalizar livro.",
+      "RENEW_SUCCESS": "Livro renovado com sucesso!",
+      "RENEW_ERROR": "Erro ao renovar livro."
+    }
+  },
+  "PLATFORM": {
+    "FEATURED": "Em Destaque",
+    "RECOMMENDED": "Leia também"
+  },
+  "USER_PROFILE": {
+    "CHANGE_PHOTO": "Alterar Foto",
+    "CHANGE_PASSWORD": "Alterar Senha",
+    "UPDATE_PHOTO_TITLE": "Atualizar Foto de Perfil",
+    "SELECT_IMAGE": "Selecionar Imagem",
+    "CANCEL": "Cancelar",
+    "SAVE": "Salvar",
+    "UPDATE_PASSWORD_TITLE": "Alterar Senha",
+    "NEW_PASSWORD_LABEL": "Nova Senha",
+    "NEW_PASSWORD_PLACEHOLDER": "Digite a nova senha",
+    "MY_LOANS": "Meus Empréstimos",
+    "NO_LOANS": "Você ainda não pegou nenhum livro emprestado.",
+    "MESSAGES": {
+      "SELECT_IMAGE_ERROR": "Por favor, selecione uma imagem.",
+      "IMAGE_SIZE_ERROR": "Imagem muito grande. Selecione uma imagem com menos de 5MB.",
+      "PHOTO_SUCCESS": "Foto de perfil atualizada com sucesso!",
+      "PHOTO_ERROR": "Erro ao atualizar foto de perfil.",
+      "PASSWORD_EMPTY_ERROR": "A senha não pode ser vazia.",
+      "PASSWORD_SUCCESS": "Senha atualizada com sucesso!",
+      "PASSWORD_ERROR": "Erro ao atualizar a senha."
+    },
+    "LOAN_TABLE": {
+      "TITLE": "Título do Livro",
+      "REQUESTED": "Solicitado",
+      "BORROWED": "Emprestado",
+      "DUE": "Devolução",
+      "FINE": "Multa",
+      "STATUS": "Status"
+    }
+  },
+  "NEW_USER": {
+    "TITLE": "Cadastrar Novo Usuário",
+    "LABELS": {
+      "REGISTRATION": "Matrícula",
+      "NAME": "Nome Completo",
+      "PASSWORD": "Senha",
+      "ROLE": "Tipo de Usuário"
+    },
+    "PLACEHOLDERS": {
+      "REGISTRATION": "Digite a matrícula",
+      "NAME": "Digite o nome",
+      "PASSWORD": "Digite a senha"
+    },
+    "ROLES": {
+      "STUDENT": "Aluno",
+      "ADMIN": "Admin"
+    },
+    "BUTTONS": {
+      "REGISTER": "Cadastrar"
+    },
+    "MESSAGES": {
+      "SUCCESS": "Usuário cadastrado com sucesso!",
+      "ERROR": "Erro ao cadastrar usuário."
+    },
+    "ERROR": {
+      "REGISTRATION_REQUIRED": "A matrícula é obrigatória.",
+      "NAME_REQUIRED": "O nome é obrigatório.",
+      "PASSWORD_REQUIRED": "A senha é obrigatória."
+    }
+  },
+  "SEARCH": {
+    "PLACEHOLDER": "Digite o Título do Livro, Autor ou Gênero",
+    "BUTTON": "Buscar",
+    "ERROR_MIN_LENGTH": "Você precisa digitar no mínimo uma palavra com 3 ou mais caracteres válidos para realizar a busca."
+  },
+  "FOOTER": {
+    "COPYRIGHT": "Copyright © 2023-2025 Bibliothek. Todos os direitos reservados."
+  },
+  "COMMON": {
+    "FORM_INVALID_ERROR": "Por favor, preencha todos os campos corretamente."
+  },
+  "NOT_FOUND": {
+    "TITLE": "Página não encontrada",
+    "MESSAGE": "Parece que o livro ou página que você procura não existe.",
+    "BUTTON": "Voltar para Plataforma"
+  }
+}

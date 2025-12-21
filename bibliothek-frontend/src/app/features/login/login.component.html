@@ -1,26 +1,72 @@
-<main class="container-login">
-    <div class="imagem-lateral">
+<main class="login-container">
+  <div class="side-image"></div>
+  <div class="info-panel">
+    <div class="info-box">
+      <a [routerLink]="['/']">
+        <img class="logo" src="assets/logo-login.png" alt="Bibliothek Logo" />
+      </a>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <h3 class="heading-login">{{ "LOGIN.TITLE" | translate }}</h3>
+
+        <fieldset>
+          <input
+            [placeholder]="'LOGIN.REGISTRATION_PLACEHOLDER' | translate"
+            type="text"
+            formControlName="registration"
+            autocomplete="username"
+            autofocus
+          />
+        </fieldset>
+
+        <fieldset>
+          <input
+            [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate"
+            type="password"
+            formControlName="password"
+            autocomplete="current-password"
+          />
+        </fieldset>
+
+        <fieldset>
+          <button type="submit" [disabled]="loginForm.invalid || isLoading">
+            {{ "LOGIN.BUTTON" | translate }}
+          </button>
+        </fieldset>
+      </form>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage | translate }}
+      </div>
     </div>
-    <div class="informacoes">
-        <div class="informacoes-box">
-            <a [routerLink]="['/']"><img class="logo" src="../../assets/logo-login.png" alt=""></a>
-            <form id="contact" (ngSubmit)="onSubmit()">
-                <h3 class="heading-login">Faça login na sua conta</h3>
-                <fieldset>
-                    <input placeholder="Digite sua Matrícula" type="text" name="registration" [(ngModel)]="registration"
-                        tabindex="1" required autofocus>
-                </fieldset>
-                <fieldset>
-                    <input placeholder="***********" type="password" [(ngModel)]="password" name="password" tabindex="2"
-                        required>
-                </fieldset>
-                <fieldset>
-                    <button type="submit" id="contact-submit">Login</button>
-                </fieldset>
-            </form>
-            <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-            <a href="">Esqueceu sua Senha?</a>
-        </div>
+
+    <div class="lang-switcher">
+      <button
+        type="button"
+        class="flag-btn"
+        [class.active]="currentLang === 'en'"
+        (click)="switchLanguage('en')"
+        aria-label="Switch language to English"
+      >
+        <img
+          src="https://hatscripts.github.io/circle-flags/flags/us.svg"
+          alt=""
+        />
+      </button>
+
+      <button
+        type="button"
+        class="flag-btn"
+        [class.active]="currentLang === 'pt'"
+        (click)="switchLanguage('pt')"
+        aria-label="Mudar idioma para Português"
+      >
+        <img
+          src="https://hatscripts.github.io/circle-flags/flags/br.svg"
+          alt=""
+        />
+      </button>
     </div>
+  </div>
 </main>
 <loading-spinner [visible]="isLoading"></loading-spinner>

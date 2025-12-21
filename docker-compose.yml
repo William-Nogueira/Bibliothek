@@ -1,23 +1,29 @@
 services:
-  db:
-    image: postgres:17
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: bibliothek
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - network
     healthcheck:
         test: ["CMD-SHELL", "pg_isready -U postgres"]
-        interval: 10s
+        interval: 5s
         timeout: 5s
         retries: 5
+        start_period: 3s
 
   backend:
     build:
       context: ./bibliothek-backend
+      dockerfile: Dockerfile
+    container_name: bibliothek-backend
     environment:
       DB_URL: jdbc:postgresql://postgres:5432/bibliothek
       DB_USERNAME: postgres
@@ -26,16 +32,26 @@ services:
       FRONTEND_URL: http://localhost:4200/
     ports:
       - "8080:8080"
+    networks:
+      - network
     depends_on:
-      - db
+      postgres:
+        condition: service_healthy
 
   frontend:
     build:
       context: ./bibliothek-frontend
+      dockerfile: Dockerfile
+    container_name: bibliothek-frontend
     ports:
       - "4200:80"
+    networks:
+      - network
     depends_on:
       - backend
 
 volumes:
-  db-data:
+  postgres_data:
+
+networks:
+  network:

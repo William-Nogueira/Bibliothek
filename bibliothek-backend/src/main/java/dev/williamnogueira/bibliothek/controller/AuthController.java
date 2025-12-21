@@ -1,10 +1,10 @@
 package dev.williamnogueira.bibliothek.controller;
 
 import dev.williamnogueira.bibliothek.domain.auth.AuthService;
-import dev.williamnogueira.bibliothek.domain.auth.dto.register.RegisterResponseDTO;
-import dev.williamnogueira.bibliothek.domain.auth.dto.login.LoginRequestDTO;
-import dev.williamnogueira.bibliothek.domain.auth.dto.login.LoginResponseDTO;
-import dev.williamnogueira.bibliothek.domain.auth.dto.register.RegisterRequestDTO;
+import dev.williamnogueira.bibliothek.domain.auth.dto.register.RegisterResponseDto;
+import dev.williamnogueira.bibliothek.domain.auth.dto.login.LoginRequestDto;
+import dev.williamnogueira.bibliothek.domain.auth.dto.login.LoginResponseDto;
+import dev.williamnogueira.bibliothek.domain.auth.dto.register.RegisterRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +22,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponseDTO> register(@RequestBody @Valid RegisterRequestDTO registerRequest) {
+    public ResponseEntity<RegisterResponseDto> register(@RequestBody @Valid RegisterRequestDto registerRequest) {
         var createdUser = authService.register(registerRequest);
         var location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{registration}")

@@ -1,11 +1,12 @@
 package dev.williamnogueira.bibliothek.domain.book;
 
-import dev.williamnogueira.bibliothek.domain.book.dto.BookRequestDTO;
-import dev.williamnogueira.bibliothek.domain.book.dto.BookResponseDTO;
+import dev.williamnogueira.bibliothek.domain.book.dto.BookRequestDto;
+import dev.williamnogueira.bibliothek.domain.book.dto.BookResponseDto;
 import dev.williamnogueira.bibliothek.domain.book.exception.BookNotFoundException;
 import dev.williamnogueira.bibliothek.domain.book.mapper.BookMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,23 +19,24 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookService {
 
     private final BookRepository bookRepository;
 
     @Transactional(readOnly = true)
-    public BookResponseDTO findById(String id) {
+    public BookResponseDto findById(String id) {
         var book = getEntity(UUID.fromString(id));
         return BookMapper.toDto(book);
     }
 
     @Transactional(readOnly = true)
-    public Page<BookResponseDTO> findAllWithFilter(String searchQuery, Pageable pageable) {
+    public Page<BookResponseDto> findAllWithFilter(String searchQuery, Pageable pageable) {
         return bookRepository.filterBooks(searchQuery, pageable).map(BookMapper::toDto);
     }
 
     @Transactional(readOnly = true)
-    public List<BookResponseDTO> getFeaturedBooks() {
+    public List<BookResponseDto> getFeaturedBooks() {
         List<BookEntity> featuredBooks = bookRepository.findByFeaturedIsTrue();
         if (featuredBooks.isEmpty()) {
             throw new BookNotFoundException("No featured books found.");
@@ -45,7 +47,7 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public List<BookResponseDTO> getRecommendationsByGenre(String genre) {
+    public List<BookResponseDto> getRecommendationsByGenre(String genre) {
         var limitFive = PageRequest.of(0, 5);
         return bookRepository.getRecommendationsByGenre(genre, limitFive)
                 .stream()
@@ -54,28 +56,42 @@ public class BookService {
     }
 
     @Transactional
-    public BookResponseDTO create(BookRequestDTO book) {
-        return BookMapper.toDto(bookRepository.save(BookMapper.toEntity(book)));
+    public BookResponseDto create(BookRequestDto book) {
+        log.info("Creating new book: '{}' by '{}'", book.title(), book.author());
+        var entity = bookRepository.saveAndFlush(BookMapper.toEntity(book));
+        log.info("Book created successfully with ID: {}", entity.getId());
+
+        return BookMapper.toDto(entity);
     }
 
     @Transactional
-    public BookResponseDTO updateById(String id, @Valid BookRequestDTO book) {
-        var bookToUpdate = getEntity(UUID.fromString(id));
-        var bookToSave = BookMapper.toEntity(book);
+    public BookResponseDto updateById(String id, @Valid BookRequestDto bookDto) {
+        log.info("Updating book ID: {}", id);
+        var existingBook = getEntity(UUID.fromString(id));
+        var bookToSave = BookMapper.toEntity(bookDto);
+        bookToSave.setId(existingBook.getId());
 
-        if (!Objects.equals(book.stock(), bookToUpdate.getStock())) {
-            int stockDifference = book.stock() - bookToUpdate.getStock();
-            int newAvailability = bookToUpdate.getAvailableStock() + stockDifference;
-            bookToSave.setAvailableStock(newAvailability);
+        int currentAvailable = existingBook.getAvailableStock();
+
+        if (!Objects.equals(bookDto.stock(), existingBook.getStock())) {
+            int stockDifference = bookDto.stock() - existingBook.getStock();
+            currentAvailable += stockDifference;
+
+            log.info("Stock adjusted. Old Total: {}, New Total: {}, Available Diff: {}",
+                    existingBook.getStock(), bookDto.stock(), stockDifference);
         }
+
+        bookToSave.setAvailableStock(currentAvailable);
 
         return BookMapper.toDto(bookRepository.save(bookToSave));
     }
 
     @Transactional
     public void deleteById(String id) {
+        log.info("Requesting deletion of book ID: {}", id);
         var book = getEntity(UUID.fromString(id));
         bookRepository.delete(book);
+        log.info("Book ID: {} deleted successfully", id);
     }
 
     public BookEntity getEntity(UUID id) {

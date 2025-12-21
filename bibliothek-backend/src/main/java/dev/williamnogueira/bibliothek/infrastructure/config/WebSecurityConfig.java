@@ -24,8 +24,6 @@ import org.springframework.web.filter.CorsFilter;
 @EnableMethodSecurity
 public class WebSecurityConfig {
 
-    private static final String ADMIN = "ADMIN";
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -39,12 +37,6 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/auth/*").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/book").hasRole(ADMIN)
-                        .requestMatchers(HttpMethod.PUT, "/api/book/*").hasRole(ADMIN)
-                        .requestMatchers(HttpMethod.DELETE, "/api/book/*").hasRole(ADMIN)
-                        .requestMatchers(HttpMethod.POST, "/api/loan/emprestimo/*").hasRole(ADMIN)
-                        .requestMatchers(HttpMethod.POST, "/api/loan/finalizar/*").hasRole(ADMIN)
-                        .requestMatchers(HttpMethod.POST, "/api/loan/listar-loan").hasRole(ADMIN)
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

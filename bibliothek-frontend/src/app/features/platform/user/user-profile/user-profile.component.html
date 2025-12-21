@@ -1,0 +1,139 @@
+<main>
+  <app-navbar></app-navbar>
+  <div class="padding-bottom"></div>
+
+  <article class="container">
+    <img class="profile-pic" [src]="getProfilePic()" alt="Profile" />
+    <h2 class="title">{{ getCurrentUserName() }}</h2>
+
+    <div *ngIf="showInfo">
+      <div class="loan-container">
+        <h3 class="info-header">{{ "USER_PROFILE.MY_LOANS" | translate }}</h3>
+
+        <div class="loan-list-container" *ngIf="loans.length > 0; else noLoans">
+          <div class="list-header">
+            <p class="col-title">
+              {{ "USER_PROFILE.LOAN_TABLE.TITLE" | translate }}
+            </p>
+            <p class="col-date">
+              {{ "USER_PROFILE.LOAN_TABLE.REQUESTED" | translate }}
+            </p>
+            <p class="col-date">
+              {{ "USER_PROFILE.LOAN_TABLE.BORROWED" | translate }}
+            </p>
+            <p class="col-date">
+              {{ "USER_PROFILE.LOAN_TABLE.DUE" | translate }}
+            </p>
+            <p class="col-money">
+              {{ "USER_PROFILE.LOAN_TABLE.FINE" | translate }}
+            </p>
+            <p class="col-status">
+              {{ "USER_PROFILE.LOAN_TABLE.STATUS" | translate }}
+            </p>
+          </div>
+
+          <a class="list-item" *ngFor="let loan of loans">
+            <div class="col-title flex-title">
+              <div class="text-group">
+                <h4>{{ loan.bookTitle }}</h4>
+              </div>
+            </div>
+
+            <p class="col-date">{{ loan.requestDate | date : "dd/MM/yyyy" }}</p>
+            <p class="col-date">
+              {{ loan.loanDate ? (loan.loanDate | date : "dd/MM/yyyy") : "-" }}
+            </p>
+            <p class="col-date">
+              {{
+                loan.returnDate ? (loan.returnDate | date : "dd/MM/yyyy") : "-"
+              }}
+            </p>
+            <p class="col-money">R$ {{ loan.fine | number : "1.2-2" }}</p>
+
+            <span
+              class="col-status status-badge"
+              [ngClass]="loan.status.toLowerCase()"
+            >
+              {{ "LOANS.STATUS." + loan.status | translate }}
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <ng-template #noLoans>
+        <p class="no-data">{{ "USER_PROFILE.NO_LOANS" | translate }}</p>
+      </ng-template>
+
+      <div class="button-div">
+        <button class="button" (click)="togglePhotoForm()">
+          {{ "USER_PROFILE.CHANGE_PHOTO" | translate }}
+        </button>
+        <button class="button" (click)="togglePasswordForm()">
+          {{ "USER_PROFILE.CHANGE_PASSWORD" | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="showPhotoForm" class="form-container">
+      <h3>{{ "USER_PROFILE.UPDATE_PHOTO_TITLE" | translate }}</h3>
+      <form (ngSubmit)="updateProfilePic()">
+        <fieldset>
+          <label for="fileUpload">{{
+            "USER_PROFILE.SELECT_IMAGE" | translate
+          }}</label>
+          <input
+            id="fileUpload"
+            type="file"
+            (change)="onFileSelected($event)"
+            accept=".jpg, .jpeg, .png"
+          />
+        </fieldset>
+        <div class="button-div">
+          <a class="button secondary" (click)="cancelEdit()">{{
+            "USER_PROFILE.CANCEL" | translate
+          }}</a>
+          <button type="submit" class="button">
+            {{ "USER_PROFILE.SAVE" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="showPasswordForm" class="form-container">
+      <h3>{{ "USER_PROFILE.UPDATE_PASSWORD_TITLE" | translate }}</h3>
+      <form (ngSubmit)="updatePassword()">
+        <fieldset>
+          <label for="password">{{
+            "USER_PROFILE.NEW_PASSWORD_LABEL" | translate
+          }}</label>
+          <input
+            class="input-field"
+            [placeholder]="'USER_PROFILE.NEW_PASSWORD_PLACEHOLDER' | translate"
+            type="password"
+            name="password"
+            [(ngModel)]="userForm.password"
+            required
+          />
+        </fieldset>
+        <div class="button-div">
+          <a class="button secondary" (click)="cancelEdit()">{{
+            "USER_PROFILE.CANCEL" | translate
+          }}</a>
+          <button type="submit" class="button">
+            {{ "USER_PROFILE.SAVE" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div
+      class="message"
+      [class.success]="messageSuccess"
+      [class.error]="messageError"
+      *ngIf="message"
+    >
+      <h3>{{ message | translate }}</h3>
+    </div>
+  </article>
+</main>
+<app-footer></app-footer>

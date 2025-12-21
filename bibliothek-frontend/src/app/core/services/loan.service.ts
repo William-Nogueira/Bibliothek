@@ -1,67 +1,50 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Loan } from "../models/loan";
+import { Page } from '../models/page';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoanService {
-  private apiUrl = 'http://localhost:8080/api/loan';
+  private readonly apiUrl = 'http://localhost:8080/api/loans';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
+    return new HttpHeaders({ Authorization: `Bearer ${token}` });
   }
 
-  agendarEmprestimo(id: string, matricula: string): Observable<string> {
+  getUserLoans(page: number = 0, size: number = 10): Observable<Page<Loan>> {
     const headers = this.getAuthHeaders();
-    return this.http.post<string>(
-      `${this.apiUrl}/solicitar/${id}/${matricula}`,
-      null,
-      { headers }
-    );
+    const registration = localStorage.getItem('registration');
+    return this.http.get<Page<Loan>>(`${this.apiUrl}/user/${registration}`, { headers, params: { page, size } });
   }
 
-  getEmprestimosUsuario(matricula: string): Observable<any[]> {
+  getAllLoans(page: number = 0, size: number = 10): Observable<Page<Loan>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<any[]>(`${this.apiUrl}/verificar/${matricula}`, {
-      headers,
-    });
+    return this.http.get<Page<Loan>>(`${this.apiUrl}`, { headers, params: { page, size } });
   }
 
-  getTodosEmprestimos(): Observable<any[]> {
+  requestLoan(bookId: string): Observable<void> {
     const headers = this.getAuthHeaders();
-    return this.http.get<any[]>(`${this.apiUrl}`, { headers });
+    return this.http.post<void>(`${this.apiUrl}/request/${bookId}`, {}, { headers });
   }
 
-  aprovarEmprestimo(codEmprestimo: number): Observable<any> {
+  approveLoan(loanId: string): Observable<void> {
     const headers = this.getAuthHeaders();
-    return this.http.post<any>(
-      `${this.apiUrl}/emprestimo/${codEmprestimo}`,
-      null,
-      { headers }
-    );
+    return this.http.post<void>(`${this.apiUrl}/${loanId}/approve`, {}, { headers });
   }
 
-  finalizarEmprestimo(codEmprestimo: number): Observable<any> {
+  finishLoan(loanId: string): Observable<void> {
     const headers = this.getAuthHeaders();
-    return this.http.post<any>(
-      `${this.apiUrl}/finalizar/${codEmprestimo}`,
-      null,
-      { headers }
-    );
+    return this.http.post<void>(`${this.apiUrl}/${loanId}/finish`, {}, { headers });
   }
 
-  renovarEmprestimo(codEmprestimo: number): Observable<any> {
+  renewLoan(loanId: string): Observable<void> {
     const headers = this.getAuthHeaders();
-    return this.http.put<any>(
-      `${this.apiUrl}/emprestimo/${codEmprestimo}`,
-      null,
-      { headers }
-    );
+    return this.http.post<void>(`${this.apiUrl}/${loanId}/renew`, {}, { headers });
   }
 }

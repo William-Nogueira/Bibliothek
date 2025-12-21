@@ -1,0 +1,123 @@
+<main>
+  <app-navbar></app-navbar>
+  <div class="padding-bottom"></div>
+  <article class="container">
+    <section class="section">
+      <div>
+        <h2 class="title">{{ "NEW_USER.TITLE" | translate }}</h2>
+      </div>
+      <div class="form-wrapper">
+        <form [formGroup]="userForm" (ngSubmit)="registerUser()">
+          <fieldset>
+            <label for="registration">{{
+              "NEW_USER.LABELS.REGISTRATION" | translate
+            }}</label>
+            <input
+              [placeholder]="'NEW_USER.PLACEHOLDERS.REGISTRATION' | translate"
+              type="text"
+              formControlName="registration"
+              id="registration"
+              required
+            />
+            <div
+              *ngIf="
+                userForm.get('registration')?.invalid &&
+                userForm.get('registration')?.touched
+              "
+              class="error-text"
+            >
+              {{ "NEW_USER.ERROR.REGISTRATION_REQUIRED" | translate }}
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <label for="name">{{ "NEW_USER.LABELS.NAME" | translate }}</label>
+            <input
+              [placeholder]="'NEW_USER.PLACEHOLDERS.NAME' | translate"
+              type="text"
+              formControlName="name"
+              id="name"
+              required
+            />
+            <div
+              *ngIf="
+                userForm.get('name')?.invalid && userForm.get('name')?.touched
+              "
+              class="error-text"
+            >
+              {{ "NEW_USER.ERROR.NAME_REQUIRED" | translate }}
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <label for="password">{{
+              "NEW_USER.LABELS.PASSWORD" | translate
+            }}</label>
+            <input
+              [placeholder]="'NEW_USER.PLACEHOLDERS.PASSWORD' | translate"
+              type="password"
+              formControlName="password"
+              id="password"
+              required
+            />
+            <div
+              *ngIf="
+                userForm.get('password')?.invalid &&
+                userForm.get('password')?.touched
+              "
+              class="error-text"
+            >
+              {{ "NEW_USER.ERROR.PASSWORD_REQUIRED" | translate }}
+            </div>
+          </fieldset>
+
+          <fieldset id="roles-group">
+            <label for="roles-group">{{ "NEW_USER.LABELS.ROLE" | translate }}</label>
+
+            <div class="radio-group">
+              <div class="radio-item">
+                <input
+                  type="radio"
+                  value="ROLE_USER"
+                  formControlName="roles"
+                  id="ROLE_USER"
+                />
+                <label for="ROLE_USER">{{
+                  "NEW_USER.ROLES.STUDENT" | translate
+                }}</label>
+              </div>
+
+              <div class="radio-item">
+                <input
+                  type="radio"
+                  value="ROLE_USER,ROLE_ADMIN"
+                  formControlName="roles"
+                  id="ROLE_ADMIN"
+                />
+                <label for="ROLE_ADMIN">{{
+                  "NEW_USER.ROLES.ADMIN" | translate
+                }}</label>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="button-container">
+            <button type="submit" [disabled]="userForm.invalid">
+              {{ "NEW_USER.BUTTONS.REGISTER" | translate }}
+            </button>
+          </div>
+        </form>
+
+        <div
+          class="message"
+          [class.success]="messageSuccess"
+          [class.error]="messageError"
+          *ngIf="message"
+        >
+          <h3>{{ message | translate }}</h3>
+        </div>
+      </div>
+    </section>
+  </article>
+</main>
+<app-footer></app-footer>

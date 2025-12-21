@@ -5,13 +5,13 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router';
   providedIn: 'root',
 })
 export class ProfileGuard {
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    const registrationFromUrl = route.paramMap.get('registration');
-    const registrationFromLocalStorage = localStorage.getItem('registration');
+    const urlRegistration  = route.paramMap.get('registration');
+    const localRegistration  = localStorage.getItem('registration');
 
-    if (registrationFromUrl !== registrationFromLocalStorage) {
+    if (urlRegistration  !== localRegistration ) {
       this.router.navigate(['/platform']);
       return false;
     }

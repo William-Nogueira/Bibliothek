@@ -3,4 +3,4 @@ export interface TokenData {
     iss: string,
     role: string[],
     sub: string
-};
+}

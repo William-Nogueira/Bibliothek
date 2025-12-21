@@ -7,10 +7,10 @@ import { AuthService } from 'src/app/core/services/auth.service';
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent {
-  constructor(private authService: AuthService) {}
-
   isDropdownOpen = false;
   closeTimer: any;
+
+  constructor(private readonly authService: AuthService) {}
 
   openDropdown() {
     this.isDropdownOpen = true;

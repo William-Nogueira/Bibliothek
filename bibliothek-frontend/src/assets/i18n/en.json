@@ -1,0 +1,223 @@
+{
+  "BOOKS": {
+    "LIST": {
+      "LOADING": "Loading...",
+      "NO_RESULTS": "No books found",
+      "PAGE": "Page",
+      "OF": "of"
+    },
+    "TABLE": {
+      "TITLE": "Title",
+      "PUBLISHER": "Publisher",
+      "GENRE": "Genre",
+      "DETAILS": "Details"
+    },
+    "BUTTONS": {
+      "MORE_DETAILS": "More Details",
+      "PREVIOUS": "Previous",
+      "NEXT": "Next"
+    }
+  },
+  "BOOK_DETAILS": {
+    "HOME": "Home",
+    "STOCK": "Stock",
+    "AVAILABLE": "Available",
+    "PUBLISHER": "Publisher",
+    "GENRE": "Genre",
+    "REQUEST_LOAN": "Request Loan",
+    "EDIT": "Edit Book",
+    "DELETE": "Delete Book",
+    "EDIT_TITLE": "Edit: {{title}}",
+    "LABELS": {
+      "TITLE": "Book Title",
+      "GENRE": "Genre",
+      "AUTHOR": "Author",
+      "PUBLISHER": "Publisher",
+      "STOCK": "Quantity in Stock",
+      "IMAGE": "Image URL",
+      "FEATURED": "Featured",
+      "DESCRIPTION": "Synopsis"
+    },
+    "BUTTONS": {
+      "CANCEL": "Cancel",
+      "SAVE": "Save Changes"
+    },
+    "MESSAGES": {
+      "LOAN_SUCCESS": "Loan requested successfully!",
+      "LOAN_ERROR": "Error requesting loan. You might already have this book.",
+      "EDIT_SUCCESS": "Book updated successfully!",
+      "EDIT_ERROR": "Error updating book.",
+      "DELETE_CONFIRM": "Are you sure you want to delete this book?",
+      "DELETE_ERROR": "Error deleting book.",
+      "LOAN_CONFIRM": "Are you sure you want to request this book?"
+    }
+  },
+  "NEW_BOOK": {
+    "TITLE": "Register New Book",
+    "LABELS": {
+      "TITLE": "Book Title",
+      "GENRE": "Genre",
+      "AUTHOR": "Author",
+      "PUBLISHER": "Publisher",
+      "STOCK": "Quantity in Stock",
+      "IMAGE_URL": "Cover Image URL",
+      "FEATURED": "Featured Book",
+      "DESCRIPTION": "Synopsis"
+    },
+    "PLACEHOLDERS": {
+      "TITLE": "Enter book title",
+      "GENRE": "Enter genre",
+      "AUTHOR": "Enter author name",
+      "PUBLISHER": "Enter publisher",
+      "STOCK": "Enter quantity",
+      "IMAGE_URL": "e.g., https://example.com/cover.jpg",
+      "DESCRIPTION": "Write book synopsis here..."
+    },
+    "BUTTONS": {
+      "REGISTER": "Register Book"
+    },
+    "MESSAGES": {
+      "SUCCESS": "Book registered successfully!",
+      "ERROR": "Error registering book."
+    },
+    "ERROR": {
+      "TITLE_REQUIRED": "Title is required.",
+      "GENRE_REQUIRED": "Genre is required.",
+      "AUTHOR_REQUIRED": "Author is required.",
+      "PUBLISHER_REQUIRED": "Publisher is required.",
+      "STOCK_POSITIVE": "Stock must be a positive number.",
+      "URL_VALID": "Valid image URL is required.",
+      "DESCRIPTION_REQUIRED": "Synopsis is required."
+    }
+  },
+  "NAV": {
+    "BOOKS": "Books",
+    "ADMIN_MENU": "Admin Menu",
+    "LOANS": "Loans",
+    "REGISTER_BOOK": "Register Book",
+    "REGISTER_USER": "Register User",
+    "LOGOUT": "Logout"
+  },
+  "LOGIN": {
+    "TITLE": "Log in to your account",
+    "REGISTRATION_PLACEHOLDER": "Registration ID",
+    "PASSWORD_PLACEHOLDER": "Password",
+    "BUTTON": "Login",
+    "FORGOT": "Forgot your password?",
+    "ERROR_INVALID": "Invalid registration ID or password.",
+    "ERROR_UNEXPECTED": "An unexpected error occurred."
+  },
+  "LOANS": {
+    "TITLE": "Loans",
+    "TABLE": {
+      "TITLE": "Title",
+      "USER": "User",
+      "REQUESTED": "Requested",
+      "BORROWED": "Borrowed",
+      "DUE": "Due Date",
+      "FINE": "Fine",
+      "STATUS": "Status",
+      "ACTIONS": "Actions"
+    },
+    "STATUS": {
+      "PENDING": "Pending",
+      "ACTIVE": "Active",
+      "RENEWED": "Renewed",
+      "FINISHED": "Finished"
+    },
+    "BUTTONS": {
+      "APPROVE": "Approve",
+      "FINISH": "Finish",
+      "RENEW": "Renew",
+      "DONE": "Done"
+    },
+    "MESSAGES": {
+      "APPROVE_SUCCESS": "Loan approved successfully!",
+      "APPROVE_ERROR": "Error approving loan.",
+      "FINISH_SUCCESS": "Loan finished successfully!",
+      "FINISH_ERROR": "Error finishing loan.",
+      "RENEW_SUCCESS": "Loan renewed successfully!",
+      "RENEW_ERROR": "Error renewing loan."
+    }
+  },
+  "PLATFORM": {
+    "FEATURED": "Featured Books",
+    "RECOMMENDED": "You might also like"
+  },
+  "USER_PROFILE": {
+    "CHANGE_PHOTO": "Change Photo",
+    "CHANGE_PASSWORD": "Change Password",
+    "UPDATE_PHOTO_TITLE": "Update Profile Picture",
+    "SELECT_IMAGE": "Select Image",
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "UPDATE_PASSWORD_TITLE": "Change Password",
+    "NEW_PASSWORD_LABEL": "New Password",
+    "NEW_PASSWORD_PLACEHOLDER": "Enter new password",
+    "MY_LOANS": "My Loans",
+    "NO_LOANS": "You haven't borrowed any books yet.",
+    "MESSAGES": {
+      "SELECT_IMAGE_ERROR": "Please select an image.",
+      "IMAGE_SIZE_ERROR": "Image is too large. Please select an image under 5MB.",
+      "PHOTO_SUCCESS": "Profile picture updated successfully!",
+      "PHOTO_ERROR": "Failed to update profile picture.",
+      "PASSWORD_EMPTY_ERROR": "Password cannot be empty.",
+      "PASSWORD_SUCCESS": "Password updated successfully!",
+      "PASSWORD_ERROR": "Failed to update password."
+    },
+    "LOAN_TABLE": {
+      "TITLE": "Book Title",
+      "REQUESTED": "Requested",
+      "BORROWED": "Borrowed",
+      "DUE": "Due Date",
+      "FINE": "Fine",
+      "STATUS": "Status"
+    }
+  },
+  "NEW_USER": {
+    "TITLE": "Register New User",
+    "LABELS": {
+      "REGISTRATION": "Registration ID",
+      "NAME": "Full Name",
+      "PASSWORD": "Password",
+      "ROLE": "User Type"
+    },
+    "PLACEHOLDERS": {
+      "REGISTRATION": "Enter registration ID",
+      "NAME": "Enter full name",
+      "PASSWORD": "Enter password"
+    },
+    "ROLES": {
+      "STUDENT": "Student",
+      "ADMIN": "Admin"
+    },
+    "BUTTONS": {
+      "REGISTER": "Register"
+    },
+    "MESSAGES": {
+      "SUCCESS": "User registered successfully!",
+      "ERROR": "Error registering user."
+    },
+    "ERROR": {
+      "REGISTRATION_REQUIRED": "Registration ID is required.",
+      "NAME_REQUIRED": "Full name is required.",
+      "PASSWORD_REQUIRED": "Password is required."
+    }
+  },
+  "SEARCH": {
+    "PLACEHOLDER": "Enter Book Title, Author or Genre",
+    "BUTTON": "Search",
+    "ERROR_MIN_LENGTH": "You need to type at least 3 characters to search."
+  },
+  "FOOTER": {
+    "COPYRIGHT": "Copyright © 2023-2025 Bibliothek. All rights reserved."
+  },
+  "COMMON": {
+    "FORM_INVALID_ERROR": "Invalid form data."
+  },
+  "NOT_FOUND": {
+    "TITLE": "Page Not Found",
+    "MESSAGE": "It seems the book or page you are looking for does not exist.",
+    "BUTTON": "Back to Platform"
+  }
+}

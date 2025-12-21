@@ -4,6 +4,7 @@
   margin: 0 auto -1px;
   width: 100%;
   z-index: 999;
+  margin-top: auto; 
 }
 
 a {

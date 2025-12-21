@@ -9,33 +9,32 @@ h2 {
   font-size: 21px;
 }
 
-.em-destaque {
+.featured {
   display: grid;
   column-gap: 18px;
   row-gap: 28px;
   grid-template-columns: repeat(auto-fill, minmax(230px, 230px));
-  margin: auto;
   justify-content: space-evenly;
   max-width: 1650px;
   width: 100%;
-  margin-top: 10px;
+  margin: 10px auto auto;
   padding: 25px;
 }
 
-.livro-em-destaque {
+.featured-book {
   background-color: white;
-  box-shadow: 0px 4px 14px -12px rgba(0, 0, 0, 0.53);
+  box-shadow: 0 4px 14px -12px rgba(0, 0, 0, 0.53);
   min-height: 350px;
   padding: 12px;
   color: #000000;
 }
 
-.livro-em-destaque:hover {
+.featured-book:hover {
   transition: all 0.3s ease;
   box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.15);
 }
 
-.livro-img {
+.book-cover {
   width: 100%;
   height: 280px;
   margin-bottom: 15px;
@@ -44,10 +43,10 @@ h2 {
   border-color: #b9b9b9;
 }
 
-.livro-titulo {
+.book-title {
   margin-bottom: 5px;
 }
 
-.livro-autor {
+.book-author {
   margin-bottom: 15px;
 }

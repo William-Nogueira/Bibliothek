@@ -1,0 +1,67 @@
+<ng-container *ngIf="loading; else results">
+  <h2 class="no-results container">{{ "BOOKS.LIST.LOADING" | translate }}</h2>
+</ng-container>
+
+<ng-template #results>
+  <ng-container *ngIf="pagedResult?.content?.length! > 0; else noResults">
+    <div class="book-list container" id="anchor">
+      <div class="list-header">
+        <p class="col-title">{{ "BOOKS.TABLE.TITLE" | translate }}</p>
+        <p class="col-publisher">{{ "BOOKS.TABLE.PUBLISHER" | translate }}</p>
+        <p class="col-genre">{{ "BOOKS.TABLE.GENRE" | translate }}</p>
+        <p class="col-details">{{ "BOOKS.TABLE.DETAILS" | translate }}</p>
+      </div>
+
+      <a
+        class="list-item"
+        [routerLink]="['/platform/details', book.id]"
+        *ngFor="let book of books"
+      >
+        <div class="img-title-wrapper">
+          <img class="book-cover" [src]="book.coverImage" [alt]="book.title" />
+          <div>
+            <h4 class="book-title">{{ book.title }}</h4>
+            <p class="book-author">{{ book.author }}</p>
+          </div>
+        </div>
+
+        <p class="col-publisher">{{ book.publisher }}</p>
+        <p class="col-genre">{{ book.genre }}</p>
+
+        <span class="btn-details">
+          {{ "BOOKS.BUTTONS.MORE_DETAILS" | translate }}
+        </span>
+      </a>
+
+      <div class="pagination">
+        <button
+          class="button-page"
+          (click)="prevPage()"
+          [disabled]="currentPage === 0"
+        >
+          {{ "BOOKS.BUTTONS.PREVIOUS" | translate }}
+        </button>
+
+        <span>
+          {{ "BOOKS.LIST.PAGE" | translate }} {{ currentPage + 1 }}
+          {{ "BOOKS.LIST.OF" | translate }} {{ totalPages }}
+        </span>
+
+        <button
+          class="button-page"
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages - 1"
+        >
+          {{ "BOOKS.BUTTONS.NEXT" | translate }}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #noResults>
+  <h2 class="no-results container">
+    {{ "BOOKS.LIST.NO_RESULTS" | translate }}
+  </h2>
+</ng-template>
+<loading-spinner [visible]="loading"></loading-spinner>

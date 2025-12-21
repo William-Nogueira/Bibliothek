@@ -1,71 +1,108 @@
-import { DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { LoanService } from 'src/app/core/services/loan.service';
+import { Loan } from 'src/app/core/models/loan';
 
 @Component({
   selector: 'app-loans',
   templateUrl: './loans.component.html',
   styleUrls: ['./loans.component.css'],
 })
-export class LoansComponent {
-  message: string = '';
-  messageSuccess: boolean = false;
-  messageError: boolean = false;
-  matricula: string | null = localStorage.getItem('matricula');
-  emprestimos: any[] = [];
+export class LoansComponent implements OnInit {
+  loans: Loan[] = [];
+
+  currentPage = 0;
+  totalPages = 1;
+  totalElements = 0;
+  loading = true;
+
+  message = '';
+  messageSuccess = false;
+  messageError = false;
 
   constructor(
-    private authService: AuthService,
-    private emprestimoService: LoanService,
-    private datePipe: DatePipe
+    private readonly loanService: LoanService,
+    private readonly translate: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.carregarEmprestimos();
+    this.loadLoans();
   }
 
-  carregarEmprestimos() {
-    this.emprestimoService.getTodosEmprestimos().subscribe(
-      (emprestimos) => {
-        this.emprestimos = emprestimos;
+  loadLoans(): void {
+    this.loading = true;
+    this.loanService.getAllLoans(this.currentPage).subscribe({
+      next: (response) => {
+        this.loans = response.content;
+        this.totalPages = response.page.totalPages;
+        this.totalElements = response.page.totalElements;
+        this.loading = false;
       },
-      (error) => {
-        console.error(error);
-      }
-    );
+      error: (error) => {
+        console.error('Error loading loans:', error);
+        this.showMessage('LOANS.MESSAGES.LOAD_ERROR', true);
+        this.loading = false;
+      },
+    });
   }
 
-  aprovarEmprestimo(codEmprestimo: number) {
-    this.emprestimoService.aprovarEmprestimo(codEmprestimo).subscribe(
-      (response) => {
-        this.carregarEmprestimos();
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.loadLoans();
+    }
   }
 
-  finalizarEmprestimo(codEmprestimo: number) {
-    this.emprestimoService.finalizarEmprestimo(codEmprestimo).subscribe(
-      (response) => {
-        this.carregarEmprestimos();
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+  prevPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadLoans();
+    }
   }
 
-  renovarEmprestimo(codEmprestimo: number) {
-    this.emprestimoService.renovarEmprestimo(codEmprestimo).subscribe(
-      (response) => {
-        this.carregarEmprestimos();
+  approveLoan(loanId: string): void {
+    this.loanService.approveLoan(loanId).subscribe({
+      next: () => {
+        this.showMessage('LOANS.MESSAGES.APPROVE_SUCCESS', false);
+        this.loadLoans();
       },
-      (error) => {
-        console.error(error);
-      }
-    );
+      error: () => this.showMessage('LOANS.MESSAGES.APPROVE_ERROR', true),
+    });
+  }
+
+  finishLoan(loanId: string): void {
+    this.loanService.finishLoan(loanId).subscribe({
+      next: () => {
+        this.showMessage('LOANS.MESSAGES.FINISH_SUCCESS', false);
+        this.loadLoans();
+      },
+      error: () => this.showMessage('LOANS.MESSAGES.FINISH_ERROR', true),
+    });
+  }
+
+  renewLoan(loanId: string): void {
+    const confirmMsg = this.translate.instant('LOANS.MESSAGES.RENEW_CONFIRM');
+
+    if (!confirm(confirmMsg)) {
+      return;
+    }
+    this.loanService.renewLoan(loanId).subscribe({
+      next: () => {
+        this.showMessage('LOANS.MESSAGES.RENEW_SUCCESS', false);
+        this.loadLoans();
+      },
+      error: () => this.showMessage('LOANS.MESSAGES.RENEW_ERROR', true),
+    });
+  }
+
+  private showMessage(key: string, isError: boolean): void {
+    this.message = key;
+    this.messageError = isError;
+    this.messageSuccess = !isError;
+    setTimeout(() => {
+      this.message = '';
+      this.messageError = false;
+      this.messageSuccess = false;
+    }, 4000);
   }
 }

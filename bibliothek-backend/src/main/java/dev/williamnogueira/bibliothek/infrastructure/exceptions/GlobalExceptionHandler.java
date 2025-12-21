@@ -9,7 +9,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Slf4j
 @ControllerAdvice
@@ -17,29 +16,26 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Object> handleResponseStatusException(ResponseStatusException ex, WebRequest request) {
-        logException(ex);
+        log.error(ex.getMessage(), ex);
         return buildErrorResponse(ex.getMessage(), ex.getStatusCode().value(), ex.getReason(), request);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGenericException(Exception ex, WebRequest request) {
-        logException(ex);
+        log.error(ex.getMessage(), ex);
         var status = HttpStatus.INTERNAL_SERVER_ERROR;
         return buildErrorResponse(ex.getMessage(), status.value(), status.getReasonPhrase(), request);
     }
 
     private ResponseEntity<Object> buildErrorResponse(String message, Integer code, String reason, WebRequest request) {
-        Map<String, Object> body = Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", code,
-                "error", reason,
-                "message", message,
-                "path", request.getDescription(false).replace("uri=", "")
-        );
-        return new ResponseEntity<>(body, HttpStatus.valueOf(code));
-    }
+        var body = ErrorResponseDto.builder()
+                .status(code)
+                .error(reason)
+                .message(message)
+                .path(request.getDescription(false).replace("uri=", ""))
+                .timestamp(LocalDateTime.now())
+                .build();
 
-    private void logException(Exception ex) {
-        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(body, HttpStatus.valueOf(code));
     }
 }

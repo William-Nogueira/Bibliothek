@@ -1,0 +1,198 @@
+<main [class.embedded]="isEditMode">
+  <ng-container *ngIf="!isEditMode; else formContent">
+    <app-navbar></app-navbar>
+    <div class="padding-bottom"></div>
+    <article class="container">
+      <section class="section">
+        <ng-container *ngTemplateOutlet="formContent"></ng-container>
+      </section>
+    </article>
+    <app-footer></app-footer>
+  </ng-container>
+</main>
+<ng-template #formContent>
+  <div>
+    <h2 class="title">
+      {{
+        (isEditMode ? "BOOK_DETAILS.EDIT_TITLE" : "NEW_BOOK.TITLE")
+          | translate : { title: bookToEdit?.title }
+      }}
+    </h2>
+  </div>
+  <div class="form-wrapper">
+    <form [formGroup]="bookForm" (ngSubmit)="submitForm()">
+      <fieldset>
+        <label for="title">{{ "NEW_BOOK.LABELS.TITLE" | translate }}</label>
+        <input
+          [placeholder]="'NEW_BOOK.PLACEHOLDERS.TITLE' | translate"
+          type="text"
+          formControlName="title"
+          id="title"
+        />
+        <div
+          *ngIf="
+            bookForm.get('title')?.invalid && bookForm.get('title')?.touched
+          "
+          class="error-text"
+        >
+          {{ "NEW_BOOK.ERROR.TITLE_REQUIRED" | translate }}
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label for="genre">{{ "NEW_BOOK.LABELS.GENRE" | translate }}</label>
+        <input
+          [placeholder]="'NEW_BOOK.PLACEHOLDERS.GENRE' | translate"
+          type="text"
+          formControlName="genre"
+          id="genre"
+        />
+        <div
+          *ngIf="
+            bookForm.get('genre')?.invalid && bookForm.get('genre')?.touched
+          "
+          class="error-text"
+        >
+          {{ "NEW_BOOK.ERROR.GENRE_REQUIRED" | translate }}
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label for="author">{{ "NEW_BOOK.LABELS.AUTHOR" | translate }}</label>
+        <input
+          [placeholder]="'NEW_BOOK.PLACEHOLDERS.AUTHOR' | translate"
+          type="text"
+          formControlName="author"
+          id="author"
+        />
+        <div
+          *ngIf="
+            bookForm.get('author')?.invalid && bookForm.get('author')?.touched
+          "
+          class="error-text"
+        >
+          {{ "NEW_BOOK.ERROR.AUTHOR_REQUIRED" | translate }}
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label for="publisher">{{
+          "NEW_BOOK.LABELS.PUBLISHER" | translate
+        }}</label>
+        <input
+          [placeholder]="'NEW_BOOK.PLACEHOLDERS.PUBLISHER' | translate"
+          type="text"
+          formControlName="publisher"
+          id="publisher"
+        />
+        <div
+          *ngIf="
+            bookForm.get('publisher')?.invalid &&
+            bookForm.get('publisher')?.touched
+          "
+          class="error-text"
+        >
+          {{ "NEW_BOOK.ERROR.PUBLISHER_REQUIRED" | translate }}
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label for="stock">{{ "NEW_BOOK.LABELS.STOCK" | translate }}</label>
+        <input
+          [placeholder]="'NEW_BOOK.PLACEHOLDERS.STOCK' | translate"
+          type="number"
+          min="0"
+          formControlName="stock"
+          id="stock"
+        />
+        <div
+          *ngIf="
+            bookForm.get('stock')?.invalid && bookForm.get('stock')?.touched
+          "
+          class="error-text"
+        >
+          {{ "NEW_BOOK.ERROR.STOCK_POSITIVE" | translate }}
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label for="coverImage">{{
+          "NEW_BOOK.LABELS.IMAGE_URL" | translate
+        }}</label>
+        <input
+          [placeholder]="'NEW_BOOK.PLACEHOLDERS.IMAGE_URL' | translate"
+          type="text"
+          formControlName="coverImage"
+          id="coverImage"
+        />
+        <div
+          *ngIf="
+            bookForm.get('coverImage')?.invalid &&
+            bookForm.get('coverImage')?.touched
+          "
+          class="error-text"
+        >
+          {{ "NEW_BOOK.ERROR.URL_VALID" | translate }}
+        </div>
+      </fieldset>
+
+      <fieldset class="full-width">
+        <div class="checkbox-container">
+          <label id="label-checkbox" for="featured">{{
+            "NEW_BOOK.LABELS.FEATURED" | translate
+          }}</label>
+          <input type="checkbox" formControlName="featured" id="featured" />
+        </div>
+      </fieldset>
+
+      <fieldset class="full-width">
+        <label for="description">{{
+          "NEW_BOOK.LABELS.DESCRIPTION" | translate
+        }}</label>
+        <textarea
+          [placeholder]="'NEW_BOOK.PLACEHOLDERS.DESCRIPTION' | translate"
+          formControlName="description"
+          id="description"
+        ></textarea>
+        <div
+          *ngIf="
+            bookForm.get('description')?.invalid &&
+            bookForm.get('description')?.touched
+          "
+          class="error-text"
+        >
+          {{ "NEW_BOOK.ERROR.DESCRIPTION_REQUIRED" | translate }}
+        </div>
+      </fieldset>
+
+      <div class="button-container full-width">
+        <button
+          *ngIf="isEditMode"
+          type="button"
+          class="button secondary"
+          (click)="cancel()"
+        >
+          {{ "BOOK_DETAILS.BUTTONS.CANCEL" | translate }}
+        </button>
+
+        <button type="submit" id="register" [disabled]="bookForm.invalid">
+          {{
+            (isEditMode
+              ? "BOOK_DETAILS.BUTTONS.SAVE"
+              : "NEW_BOOK.BUTTONS.REGISTER"
+            ) | translate
+          }}
+        </button>
+      </div>
+    </form>
+
+    <div
+      class="message"
+      [class.success]="messageSuccess"
+      [class.error]="messageError"
+      *ngIf="message"
+    >
+      <h3>{{ message | translate }}</h3>
+    </div>
+  </div>
+</ng-template>

@@ -1,24 +1,31 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './features/login/login.component';
 import { PlatformComponent } from './features/platform/platform.component';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { FeaturedBooksComponent } from './layout/featured-books/featured-books.component';
-import { ListBooksComponent } from './features/platform/list-books/list-books.component';
-import { BookDetailsComponent } from './features/platform/book-details/book-details.component';
-import { BarraBuscaComponent } from './layout/search-bar/search-bar.component';
+import { BookListComponent } from './features/platform/book/book-list/book-list.component';
+import { BookDetailsComponent } from './features/platform/book/book-details/book-details.component';
+import { SearchBarComponent } from './layout/search-bar/search-bar.component';
 import { FooterComponent } from './layout/footer/footer.component';
-import { NewBookComponent } from './features/platform/new-book/new-book.component';
-import { NewUserComponent } from './features/platform/new-user/new-user.component';
-import { UserProfileComponent } from './features/platform/user-profile/user-profile.component';
+import { BookFormComponent } from './features/platform/book/book-form/book-form.component';
+import { UserFormComponent } from './features/platform/user/user-form/user-form.component';
+import { UserProfileComponent } from './features/platform/user/user-profile/user-profile.component';
 import { DatePipe } from '@angular/common';
 import { LoansComponent } from './features/platform/loans/loans.component';
-import { Recommendationsomponent } from './layout/recommendations/recommendations.component';
+import { RecommendationsComponent } from './layout/recommendations/recommendations.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NotFoundComponent } from './layout/not-found/not-found.component';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -27,18 +34,33 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     PlatformComponent,
     NavbarComponent,
     FeaturedBooksComponent,
-    ListBooksComponent,
+    BookListComponent,
     BookDetailsComponent,
-    BarraBuscaComponent,
+    SearchBarComponent,
     FooterComponent,
-    NewBookComponent,
-    NewUserComponent,
+    BookFormComponent,
+    UserFormComponent,
     UserProfileComponent,
     LoansComponent,
-    Recommendationsomponent,
+    RecommendationsComponent,
     LoadingSpinnerComponent,
+    NotFoundComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule.forRoot({
+      defaultLanguage: 'en',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
+  ],
   providers: [DatePipe],
   bootstrap: [AppComponent],
 })

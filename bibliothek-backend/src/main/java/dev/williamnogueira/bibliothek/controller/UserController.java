@@ -1,7 +1,7 @@
 package dev.williamnogueira.bibliothek.controller;
 
-import dev.williamnogueira.bibliothek.domain.user.dto.UserRequestDTO;
-import dev.williamnogueira.bibliothek.domain.user.dto.UserResponseDTO;
+import dev.williamnogueira.bibliothek.domain.user.dto.UserRequestDto;
+import dev.williamnogueira.bibliothek.domain.user.dto.UserResponseDto;
 import dev.williamnogueira.bibliothek.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -22,12 +22,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{registration}")
-    public ResponseEntity<UserResponseDTO> findUser(@PathVariable String registration) {
+    public ResponseEntity<UserResponseDto> findUser(@PathVariable String registration) {
         return ResponseEntity.ok(userService.findByRegistration(registration));
     }
 
     @PatchMapping("/{registration}")
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable String registration, @RequestBody UserRequestDTO updatedUser) {
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable String registration,
+                                                      @RequestBody UserRequestDto updatedUser) {
         return ResponseEntity.ok(userService.updateById(registration, updatedUser));
     }
 

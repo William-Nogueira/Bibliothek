@@ -1,56 +1,98 @@
 <header>
-    <div class="container-nav">
-        <nav>
-            <div class="div-logo">
-                <a [routerLink]="['/platform']"><img class="logo" src="../../../assets/logo.png"
-                        alt="Bibliothek Logo"></a>
-                <a [routerLink]="['/platform']" class="nav-link-livros">
-                    Livros
-                </a>
-                <div class="nav-dropdown" *ngIf="isAdmin()" (mouseenter)="openDropdown()"
-                    (mouseleave)="startCloseTimer()">
-                    <a class="nav-link-livros dropdown-toggle">Menu Admin <svg viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M12.7071 14.7071C12.3166 15.0976 11.6834 15.0976 11.2929 14.7071L6.29289 9.70711C5.90237 9.31658 5.90237 8.68342 6.29289 8.29289C6.68342 7.90237 7.31658 7.90237 7.70711 8.29289L12 12.5858L16.2929 8.29289C16.6834 7.90237 17.3166 7.90237 17.7071 8.29289C18.0976 8.68342 18.0976 9.31658 17.7071 9.70711L12.7071 14.7071Z"
-                                    fill="#000000"></path>
-                            </g>
-                        </svg></a>
-                    <div class="dropdown-menu" *ngIf="isDropdownOpen" (mouseenter)="openDropdown()">
-                        <a class="dropdown-item" [routerLink]="['/sistema/emprestimos']">Empréstimos</a>
-                        <a class="dropdown-item" [routerLink]="['/platform/newBook']">Cadastrar Livros</a>
-                        <a class="dropdown-item" [routerLink]="['/sistema/cadastrarusuario']">Cadastrar Usuario</a>
-                    </div>
-                </div>
-            </div>
+  <div class="container-nav">
+    <nav>
+      <div class="div-logo">
+        <a [routerLink]="['/platform']"
+          ><img
+            class="logo"
+            src="../../../assets/logo.png"
+            alt="Bibliothek Logo"
+        /></a>
+        <a [routerLink]="['/platform']" class="nav-link-books">
+          {{ "NAV.BOOKS" | translate }}
+        </a>
+        <div
+          class="nav-dropdown"
+          *ngIf="isAdmin()"
+          (mouseenter)="openDropdown()"
+          (mouseleave)="startCloseTimer()"
+        >
+          <a class="nav-link-books dropdown-toggle"
+            >Admin
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12.7071 14.7071C12.3166 15.0976 11.6834 15.0976 11.2929 14.7071L6.29289 9.70711C5.90237 9.31658 5.90237 8.68342 6.29289 8.29289C6.68342 7.90237 7.31658 7.90237 7.70711 8.29289L12 12.5858L16.2929 8.29289C16.6834 7.90237 17.3166 7.90237 17.7071 8.29289C18.0976 8.68342 18.0976 9.31658 17.7071 9.70711L12.7071 14.7071Z"
+                  fill="#000000"
+                ></path>
+              </g></svg></a>
+          <div
+            class="dropdown-menu"
+            *ngIf="isDropdownOpen"
+            (mouseenter)="openDropdown()"
+          >
+            <a class="dropdown-item" [routerLink]="['/platform/loans']">
+              {{ "NAV.LOANS" | translate }}
+            </a>
+            <a class="dropdown-item" [routerLink]="['/platform/newBook']">
+              {{ "NAV.REGISTER_BOOK" | translate }}
+            </a>
+            <a class="dropdown-item" [routerLink]="['/platform/newUser']">
+              {{ "NAV.REGISTER_USER" | translate }}
+            </a>
+          </div>
+        </div>
+      </div>
 
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a [routerLink]="['/platform/user', getMatricula()]" class="nav-link">
-                        <img class="profile-pic" [src]="getProfilePic()"
-                            alt="Foto de perfil" alt="">
-                        {{ getCurrentUserName() }}
-                    </a>
-                    <a class="svg-link" [routerLink]="['/']" (click)="logout()"><svg fill="#000000" height="800px"
-                            width="800px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 471.2 471.2" xml:space="preserve">
-                            <title>Logout</title>
-                            <g>
-                                <g>
-                                    <path d="M227.619,444.2h-122.9c-33.4,0-60.5-27.2-60.5-60.5V87.5c0-33.4,27.2-60.5,60.5-60.5h124.9c7.5,0,13.5-6,13.5-13.5
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a [routerLink]="['/platform/user', getMatricula()]" class="nav-link">
+            <img
+              class="profile-pic"
+              [src]="getProfilePic()"
+              alt="Profile"
+            />
+            {{ getCurrentUserName() }}
+          </a>
+          <a class="svg-link" [routerLink]="['/']" (click)="logout()"
+            ><svg
+              fill="#000000"
+              height="800px"
+              width="800px"
+              id="Capa_1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 471.2 471.2"
+            >
+              <title>Logout</title>
+              <g>
+                <g>
+                  <path
+                    d="M227.619,444.2h-122.9c-33.4,0-60.5-27.2-60.5-60.5V87.5c0-33.4,27.2-60.5,60.5-60.5h124.9c7.5,0,13.5-6,13.5-13.5
                                    s-6-13.5-13.5-13.5h-124.9c-48.3,0-87.5,39.3-87.5,87.5v296.2c0,48.3,39.3,87.5,87.5,87.5h122.9c7.5,0,13.5-6,13.5-13.5
-                                   S235.019,444.2,227.619,444.2z" />
-                                    <path d="M450.019,226.1l-85.8-85.8c-5.3-5.3-13.8-5.3-19.1,0c-5.3,5.3-5.3,13.8,0,19.1l62.8,62.8h-273.9c-7.5,0-13.5,6-13.5,13.5
+                                   S235.019,444.2,227.619,444.2z"
+                  />
+                  <path
+                    d="M450.019,226.1l-85.8-85.8c-5.3-5.3-13.8-5.3-19.1,0c-5.3,5.3-5.3,13.8,0,19.1l62.8,62.8h-273.9c-7.5,0-13.5,6-13.5,13.5
                                    s6,13.5,13.5,13.5h273.9l-62.8,62.8c-5.3,5.3-5.3,13.8,0,19.1c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4l85.8-85.8
-                                   C455.319,239.9,455.319,231.3,450.019,226.1z" />
-                                </g>
-                            </g>
-                        </svg></a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+                                   C455.319,239.9,455.319,231.3,450.019,226.1z"
+                  />
+                </g>
+              </g></svg
+          ></a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </header>

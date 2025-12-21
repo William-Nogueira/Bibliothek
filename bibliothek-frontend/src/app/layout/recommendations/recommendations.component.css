@@ -6,108 +6,121 @@
   padding-bottom: 25px;
 }
 
-h2 {
+.section-title {
   margin-top: 30px;
+  margin-bottom: 20px;
   font-size: 25px;
+  color: #333;
 }
 
 a {
   color: black;
+  text-decoration: none;
 }
 
-.lista-livros {
+.book-list {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.lista-livro-header {
+.list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
   padding: 0 18px 0 9px;
-  padding-right: 18px;
   color: rgb(129, 129, 129);
+  font-weight: 600;
 }
 
-.header-titulo {
+.col-title {
   width: 325px;
   text-align: center;
 }
 
-.header-editora {
+.col-publisher {
   width: 100px;
   text-align: center;
 }
 
-.header-genero {
+.col-genre {
   width: 100px;
   text-align: center;
 }
 
-.header-detalhes {
+.col-details {
   width: 150px;
   text-align: center;
 }
 
-.lista-livro-link {
+.list-item {
   width: 100%;
   background-color: white;
   display: flex;
-  box-shadow: 0px 4px 14px -12px rgba(0, 0, 0, 0.53);
-  padding: 9px;
-  padding-right: 18px;
+  box-shadow: 0 4px 14px -12px rgba(0, 0, 0, 0.53);
+  padding: 9px 18px 9px 9px;
   justify-content: space-between;
   align-items: center;
   font-size: 15px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
-.img-titulo {
+.list-item:hover {
+  box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.img-title-wrapper {
   display: flex;
   align-items: center;
   gap: 25px;
   width: 325px;
 }
 
-.lista-livro-link:hover {
-  transition: all 0.3s ease;
-  box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.15);
-}
-
-.lista-livro-img {
+.book-cover {
   width: 60px;
   height: 85px;
-  border-style: solid;
-  border-width: 0.2px;
-  border-color: #cecece;
+  border: 0.2px solid #cecece;
+  object-fit: cover;
 }
 
-.lista-livro-titulo {
+.book-title {
   margin-bottom: 2px;
+  font-weight: 600;
 }
 
-.lista-livro-editora {
-  width: 100px;
-  text-align: center;
+.book-author {
+  color: #666;
+  font-size: 0.9em;
 }
 
-.lista-livro-genero {
-  width: 100px;
-  text-align: center;
-}
-
-.mais-detalhes {
+.btn-details {
   font-size: 14px;
-  padding: 14px 30px;
+  padding: 12px 24px;
   border: none;
-  background: rgb(89 32 201);
+  background: rgb(100, 28, 182);
   color: white;
   border-radius: 2px;
   cursor: pointer;
+  text-align: center;
+  width: 150px;
+  display: inline-block;
 }
 
-.mais-detalhes:hover {
-  background: rgb(74, 27, 167);
-  transition: 0.2s;
+.btn-details:hover {
+  background: rgb(79, 21, 145);
+}
+
+@media (max-width: 1000px) {
+  .col-publisher,
+  .col-genre {
+    display: none;
+  }
+
+  .list-header,
+  .list-item {
+    justify-content: space-between;
+  }
 }

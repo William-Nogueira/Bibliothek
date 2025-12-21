@@ -1,14 +1,14 @@
 package dev.williamnogueira.bibliothek.controller;
 
-import dev.williamnogueira.bibliothek.domain.book.BookRepository;
 import dev.williamnogueira.bibliothek.domain.book.BookService;
-import dev.williamnogueira.bibliothek.domain.book.dto.BookRequestDTO;
-import dev.williamnogueira.bibliothek.domain.book.dto.BookResponseDTO;
+import dev.williamnogueira.bibliothek.domain.book.dto.BookRequestDto;
+import dev.williamnogueira.bibliothek.domain.book.dto.BookResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,33 +27,33 @@ import java.util.List;
 @RequestMapping("/api/book")
 public class BookController {
 
-    private final BookRepository bookRepository;
     private final BookService bookService;
 
     @GetMapping
-    public ResponseEntity<Page<BookResponseDTO>> findAllWithFilter(
+    public ResponseEntity<Page<BookResponseDto>> findAllWithFilter(
             @RequestParam(required = false) String searchQuery,
             Pageable pageable) {
         return ResponseEntity.ok(bookService.findAllWithFilter(searchQuery, pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookResponseDTO> findById(@PathVariable String id) {
+    public ResponseEntity<BookResponseDto> findById(@PathVariable String id) {
         return ResponseEntity.ok(bookService.findById(id));
     }
 
     @GetMapping("/featured")
-    public ResponseEntity<List<BookResponseDTO>> getFeaturedBooks() {
+    public ResponseEntity<List<BookResponseDto>> getFeaturedBooks() {
         return ResponseEntity.ok(bookService.getFeaturedBooks());
     }
 
     @GetMapping("/recommendations")
-    public ResponseEntity<List<BookResponseDTO>> getRecommendationsByGenre(@RequestParam String genre) {
+    public ResponseEntity<List<BookResponseDto>> getRecommendationsByGenre(@RequestParam String genre) {
         return ResponseEntity.ok(bookService.getRecommendationsByGenre(genre));
     }
 
     @PostMapping
-    public ResponseEntity<BookResponseDTO> createBook(@RequestBody @Valid BookRequestDTO book) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<BookResponseDto> createBook(@RequestBody @Valid BookRequestDto book) {
         var createdBook = bookService.create(book);
         var location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -64,13 +64,14 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookResponseDTO> updateBook(
-            @Valid @RequestBody BookRequestDTO book,
-            @PathVariable String id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<BookResponseDto> updateBook(@Valid @RequestBody BookRequestDto book,
+                                                      @PathVariable String id) {
         return ResponseEntity.ok(bookService.updateById(id, book));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         bookService.deleteById(id);
         return ResponseEntity.noContent().build();

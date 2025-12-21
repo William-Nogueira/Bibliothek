@@ -16,10 +16,10 @@ import java.util.List;
 public class TokenService {
 
     @Value("${api.security.token.secret}")
-    private String SECRET;
+    private String secret;
 
     public String generateToken(UserEntity user){
-        var algorithm = Algorithm.HMAC256(SECRET);
+        var algorithm = Algorithm.HMAC256(secret);
 
         List<String> authorities = user.getAuthorities()
                 .stream()
@@ -35,7 +35,7 @@ public class TokenService {
     }
 
     public String validateToken(String token){
-        var algorithm = Algorithm.HMAC256(SECRET);
+        var algorithm = Algorithm.HMAC256(secret);
         return JWT.require(algorithm)
                 .withIssuer("auth-api")
                 .build()

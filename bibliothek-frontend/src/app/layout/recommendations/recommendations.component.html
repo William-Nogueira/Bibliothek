@@ -1,25 +1,37 @@
 <div class="container" *ngIf="recommendations.length > 0">
-    <h2>Leia também</h2>
-    <div class="lista-livros container" id="anchor">
-        <div class="lista-livro-header">
-            <p class="header-titulo">Título</p>
-            <p class="header-editora">Editora</p>
-            <p class="header-genero">Gênero</p>
-            <p class="header-detalhes">Detalhes</p>
-        </div>
-        <a class="lista-livro-link" 
-            [routerLink]="['/platform/details', recommendation.id]"
-            *ngFor="let recommendation of recommendations">
-            <div class="img-titulo">
-                <img class="lista-livro-img" [src]="recommendation.coverImage" alt="{{ recommendation.title }}" />
-                <div>
-                    <h4 class="lista-livro-titulo">{{ recommendation.title }}</h4>
-                    <p class="lista-livro-autor">{{ recommendation.author }}</p>
-                </div>
-            </div>
-            <p class="lista-livro-editora">{{ recommendation.publisher }}</p>
-            <p class="lista-livro-genero">{{ recommendation.genre }}</p>
-            <a class="mais-detalhes" [routerLink]="['/platform/details', recommendation.id]">Mais Detalhes</a>
-        </a>
+  <h2 class="section-title">{{ "PLATFORM.RECOMMENDED" | translate }}</h2>
+
+  <div class="book-list">
+    <div class="list-header">
+      <p class="col-title">{{ "BOOKS.TABLE.TITLE" | translate }}</p>
+      <p class="col-publisher">{{ "BOOKS.TABLE.PUBLISHER" | translate }}</p>
+      <p class="col-genre">{{ "BOOKS.TABLE.GENRE" | translate }}</p>
+      <p class="col-details">{{ "BOOKS.TABLE.DETAILS" | translate }}</p>
     </div>
+
+    <a
+      class="list-item"
+      [routerLink]="['/platform/details', recommendation.id]"
+      *ngFor="let recommendation of recommendations"
+    >
+      <div class="img-title-wrapper">
+        <img
+          class="book-cover"
+          [src]="recommendation.coverImage"
+          [alt]="recommendation.title"
+        />
+        <div>
+          <h4 class="book-title">{{ recommendation.title }}</h4>
+          <p class="book-author">{{ recommendation.author }}</p>
+        </div>
+      </div>
+
+      <p class="col-publisher">{{ recommendation.publisher }}</p>
+      <p class="col-genre">{{ recommendation.genre }}</p>
+
+      <span class="btn-details">
+        {{ "BOOKS.BUTTONS.MORE_DETAILS" | translate }}
+      </span>
+    </a>
+  </div>
 </div>

@@ -1,9 +1,0 @@
-<main>
-    <app-navbar></app-navbar>
-    <app-search-bar></app-search-bar>
-    <ng-container *ngIf="!hasSearchQuery">
-        <app-featured-books></app-featured-books>
-    </ng-container>
-    <app-list-books [query]="query"></app-list-books>
-</main>
-<app-footer></app-footer>
