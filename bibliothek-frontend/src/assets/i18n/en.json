@@ -137,7 +137,8 @@
       "FINISH_SUCCESS": "Loan finished successfully!",
       "FINISH_ERROR": "Error finishing loan.",
       "RENEW_SUCCESS": "Loan renewed successfully!",
-      "RENEW_ERROR": "Error renewing loan."
+      "RENEW_ERROR": "Error renewing loan.",
+      "RENEW_CONFIRM": "Are you sure you want to renew this loan?"
     }
   },
   "PLATFORM": {

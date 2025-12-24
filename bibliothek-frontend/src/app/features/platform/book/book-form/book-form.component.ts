@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BookService } from 'src/app/core/services/book.service';
 import { Book } from 'src/app/core/models/book';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-book-form',
@@ -18,6 +19,8 @@ export class BookFormComponent implements OnInit {
   message = '';
   messageSuccess = false;
   messageError = false;
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private readonly fb: FormBuilder,
@@ -38,7 +41,6 @@ export class BookFormComponent implements OnInit {
       featured: [false],
     });
   }
-
   ngOnInit(): void {
     if (this.bookToEdit) {
       this.bookForm.patchValue(this.bookToEdit);
@@ -66,31 +68,36 @@ export class BookFormComponent implements OnInit {
     }
   }
 
-  private handleCreate(book: Book) {
+  private handleCreate(book: Book): void {
     book.availableStock = book.stock;
-    this.bookService.create(book).subscribe({
-      next: () => {
-        this.clearForm();
-        this.showMessage('NEW_BOOK.MESSAGES.SUCCESS', false);
-      },
-      error: (err) => {
-        console.error(err);
-        this.showMessage('NEW_BOOK.MESSAGES.ERROR', true);
-      },
-    });
+    this.bookService
+      .create(book)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.clearForm();
+          this.showMessage('NEW_BOOK.MESSAGES.SUCCESS', false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.showMessage('NEW_BOOK.MESSAGES.ERROR', true);
+        },
+      });
   }
 
-  private handleUpdate(book: Book) {
-    this.bookService.update(book).subscribe({
-      next: () => {
-        this.showMessage('BOOK_DETAILS.MESSAGES.EDIT_SUCCESS', false);
-        this.saveEvent.emit();
-      },
-      error: (err) => {
-        console.error(err);
-        this.showMessage('BOOK_DETAILS.MESSAGES.EDIT_ERROR', true);
-      },
-    });
+  private handleUpdate(book: Book): void {
+    this.bookService
+      .update(book)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.saveEvent.emit();
+        },
+        error: (err) => {
+          console.error(err);
+          this.showMessage('BOOK_DETAILS.MESSAGES.EDIT_ERROR', true);
+        },
+      });
   }
 
   cancel(): void {

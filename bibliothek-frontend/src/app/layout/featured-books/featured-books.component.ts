@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BookService } from '../../core/services/book.service';
 import { Book } from 'src/app/core/models/book';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-featured-books',
@@ -29,9 +30,14 @@ import { Book } from 'src/app/core/models/book';
 export class FeaturedBooksComponent {
   featuredBooks: Book[] = [];
 
+  private readonly destroy$ = new Subject<void>();
+
   constructor(private readonly bookService: BookService) {
-    this.bookService.getFeaturedBooks().subscribe((books) => {
-      this.featuredBooks = books;
-    });
+    this.bookService
+      .getFeaturedBooks()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((books) => {
+        this.featuredBooks = books;
+      });
   }
 }

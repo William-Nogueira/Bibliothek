@@ -5,7 +5,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
 
-A production-grade **Fullstack Monolith** designed for managing public school libraries. This project demonstrates the implementation of business logic, **Role-Based Access Control (RBAC)**, and **Internationalization** within a robust Spring Boot and Angular architecture.
+Bibliothek is a **Fullstack Monolith** designed for managing public school libraries. It provides **structured loan control**, **Role-Based Access Control (RBAC)**, and **Internationalization**, with an emphasis on clean code and type safety.
 
 <div align="center">
   <img src="bibliothek-frontend/src/assets/bibliothek.png" width="600px" alt="Bibliothek">
@@ -17,10 +17,10 @@ A production-grade **Fullstack Monolith** designed for managing public school li
 
 ## 🏗 Architecture & Design
 
-### Backend (Spring Boot 3)
-*   **Layered Architecture:** strict separation of concerns (Controllers, Domain Services, Repositories).
+### Backend (Spring Boot 3.4)
+*   **Layered Architecture:** strict separation of concerns (Controllers, Domain Services, Infrastructure).
 *   **Security:** Implements **Spring Security** with stateless **JWT Authentication**.
-*   **Data Integrity:** Uses `@Transactional` services to ensure atomicity during complex loan operations (stock checks + user validation + loan creation).
+*   **Data Integrity:** Uses `@Transactional` and `@Lock` to ensure atomicity during complex loan operations (stock checks + user validation + loan creation).
 *   **Persistence:** PostgreSQL managed via **Flyway** migrations for consistent schema evolution.
 
 ### Frontend (Angular 16)
@@ -35,9 +35,9 @@ A production-grade **Fullstack Monolith** designed for managing public school li
 
 - User authentication with role-based access control (Admin / Student)
 - Book catalog management with stock tracking
-- Loan lifecycle management with transactional safety
+- Loan lifecycle management with transactional and lock safety
 - Internationalized UI (English / Portuguese)
-- Featured books and public catalog browsing
+- Featured highlights and genre-based recommendations
 
 ---
 
@@ -58,8 +58,8 @@ docker-compose up --build
 ```
 
 ### 2. Access the Application
-*   **Frontend:** `http://localhost:4200`
-*   **API:** `http://localhost:8080/api`
+*   **Web Interface:** `http://localhost:4200`
+*   **API Endpoints:** `http://localhost:8080/api`
 
 ### 3. Login Credentials
 The database comes pre-seeded with these accounts:

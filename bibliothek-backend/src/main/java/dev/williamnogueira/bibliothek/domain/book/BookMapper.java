@@ -1,6 +1,5 @@
-package dev.williamnogueira.bibliothek.domain.book.mapper;
+package dev.williamnogueira.bibliothek.domain.book;
 
-import dev.williamnogueira.bibliothek.domain.book.BookEntity;
 import dev.williamnogueira.bibliothek.domain.book.dto.BookRequestDto;
 import dev.williamnogueira.bibliothek.domain.book.dto.BookResponseDto;
 import lombok.experimental.UtilityClass;
@@ -11,9 +10,9 @@ import java.util.UUID;
 import static java.util.Objects.isNull;
 
 @UtilityClass
-public class BookMapper {
+class BookMapper {
 
-    public static BookResponseDto toDto(BookEntity bookEntity) {
+    static BookResponseDto toDto(BookEntity bookEntity) {
         if (isNull(bookEntity)) {
             return null;
         }
@@ -31,15 +30,14 @@ public class BookMapper {
                 .build();
     }
 
-    public static BookEntity toEntity(BookRequestDto book) {
+    static BookEntity toEntity(BookRequestDto book) {
         var builder = BookEntity.builder();
 
         if (Objects.nonNull(book.id())) {
             builder.id(UUID.fromString(book.id()));
         }
 
-        return BookEntity.builder()
-                .title(book.title())
+        return builder.title(book.title())
                 .author(book.author())
                 .genre(book.genre())
                 .publisher(book.publisher())

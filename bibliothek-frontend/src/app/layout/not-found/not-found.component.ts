@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
 export class NotFoundComponent {
   constructor(private readonly router: Router) {}
 
-  goHome() {
+  goHome(): void {
     this.router.navigate(['/platform']);
   }
 }

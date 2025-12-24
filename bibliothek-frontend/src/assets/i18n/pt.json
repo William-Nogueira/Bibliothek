@@ -137,7 +137,8 @@
       "FINISH_SUCCESS": "Livro finalizado com sucesso!",
       "FINISH_ERROR": "Erro ao finalizar livro.",
       "RENEW_SUCCESS": "Livro renovado com sucesso!",
-      "RENEW_ERROR": "Erro ao renovar livro."
+      "RENEW_ERROR": "Erro ao renovar livro.",
+      "RENEW_CONFIRM": "Tem certeza de que deseja renovar este empréstimo?"
     }
   },
   "PLATFORM": {

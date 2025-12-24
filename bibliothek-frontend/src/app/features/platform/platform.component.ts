@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-platform',
@@ -14,16 +15,18 @@ import { ActivatedRoute } from '@angular/router';
     <app-footer></app-footer> `,
   styleUrls: ['./platform.component.css'],
 })
-export class PlatformComponent implements OnInit {
+export class PlatformComponent {
   hasSearchQuery: boolean = false;
   query = '';
 
-  constructor(private readonly route: ActivatedRoute) {}
+  private readonly destroy$ = new Subject<void>();
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.query = params['query'];
-      this.hasSearchQuery = !!(this.query && this.query.trim().length > 0);
-    });
+  constructor(private readonly route: ActivatedRoute) {
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        this.query = params['query'];
+        this.hasSearchQuery = !!(this.query && this.query.trim().length > 0);
+      });
   }
 }

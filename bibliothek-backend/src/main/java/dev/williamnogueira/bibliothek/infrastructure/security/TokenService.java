@@ -8,8 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -44,6 +43,6 @@ public class TokenService {
     }
 
     private Instant genExpirationDate(){
-        return LocalDateTime.now().plusHours(6).toInstant(ZoneOffset.of("-03:00"));
+        return Instant.now().plus(6, ChronoUnit.HOURS);
     }
 }

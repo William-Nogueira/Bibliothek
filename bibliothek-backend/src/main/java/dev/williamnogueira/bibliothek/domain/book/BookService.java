@@ -3,8 +3,7 @@ package dev.williamnogueira.bibliothek.domain.book;
 import dev.williamnogueira.bibliothek.domain.book.dto.BookRequestDto;
 import dev.williamnogueira.bibliothek.domain.book.dto.BookResponseDto;
 import dev.williamnogueira.bibliothek.domain.book.exception.BookNotFoundException;
-import dev.williamnogueira.bibliothek.domain.book.mapper.BookMapper;
-import jakarta.validation.Valid;
+import dev.williamnogueira.bibliothek.domain.book.exception.BookStockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,11 +36,7 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public List<BookResponseDto> getFeaturedBooks() {
-        List<BookEntity> featuredBooks = bookRepository.findByFeaturedIsTrue();
-        if (featuredBooks.isEmpty()) {
-            throw new BookNotFoundException("No featured books found.");
-        }
-        return featuredBooks.stream()
+        return bookRepository.findByFeaturedIsTrue().stream()
                 .map(BookMapper::toDto)
                 .toList();
     }
@@ -58,44 +53,76 @@ public class BookService {
     @Transactional
     public BookResponseDto create(BookRequestDto book) {
         log.info("Creating new book: '{}' by '{}'", book.title(), book.author());
-        var entity = bookRepository.saveAndFlush(BookMapper.toEntity(book));
+        var entity = bookRepository.save(BookMapper.toEntity(book));
         log.info("Book created successfully with ID: {}", entity.getId());
 
         return BookMapper.toDto(entity);
     }
 
     @Transactional
-    public BookResponseDto updateById(String id, @Valid BookRequestDto bookDto) {
+    public BookResponseDto updateById(String id, BookRequestDto bookDto) {
         log.info("Updating book ID: {}", id);
-        var existingBook = getEntity(UUID.fromString(id));
-        var bookToSave = BookMapper.toEntity(bookDto);
-        bookToSave.setId(existingBook.getId());
 
-        int currentAvailable = existingBook.getAvailableStock();
+        var book = getEntity(UUID.fromString(id));
+        updateStockLogic(book, bookDto.stock());
 
-        if (!Objects.equals(bookDto.stock(), existingBook.getStock())) {
-            int stockDifference = bookDto.stock() - existingBook.getStock();
-            currentAvailable += stockDifference;
+        book.setTitle(bookDto.title());
+        book.setAuthor(bookDto.author());
+        book.setGenre(bookDto.genre());
+        book.setPublisher(bookDto.publisher());
+        book.setDescription(bookDto.description());
+        book.setCoverImage(bookDto.coverImage());
+        book.setFeatured(bookDto.featured());
 
-            log.info("Stock adjusted. Old Total: {}, New Total: {}, Available Diff: {}",
-                    existingBook.getStock(), bookDto.stock(), stockDifference);
-        }
-
-        bookToSave.setAvailableStock(currentAvailable);
-
-        return BookMapper.toDto(bookRepository.save(bookToSave));
+        return BookMapper.toDto(bookRepository.save(book));
     }
 
     @Transactional
     public void deleteById(String id) {
         log.info("Requesting deletion of book ID: {}", id);
         var book = getEntity(UUID.fromString(id));
+
+        if (book.getAvailableStock() < book.getStock()) {
+            int rentedCount = book.getStock() - book.getAvailableStock();
+            throw new BookStockException("Cannot delete book. " + rentedCount + " copies are currently rented out.");
+        }
+
         bookRepository.delete(book);
         log.info("Book ID: {} deleted successfully", id);
+    }
+
+    @Transactional
+    public void incrementAvailableStock(BookEntity book) {
+        book.setAvailableStock(book.getAvailableStock() + 1);
+        bookRepository.save(book);
     }
 
     public BookEntity getEntity(UUID id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException("Book not found"));
+    }
+
+    public BookEntity findBookWithPessimisticLock(UUID id) {
+        return bookRepository.findBookWithPessimisticLock(id)
+                .orElseThrow(() -> new BookNotFoundException("Book not found"));
+    }
+
+    private void updateStockLogic(BookEntity book, Integer newTotalStock) {
+        if (Objects.isNull(newTotalStock) || Objects.equals(newTotalStock, book.getStock())) {
+            return;
+        }
+
+        int stockDifference = newTotalStock - book.getStock();
+        int newAvailable = book.getAvailableStock() + stockDifference;
+
+        if (newAvailable < 0) {
+            int rentedCount = book.getStock() - book.getAvailableStock();
+            throw new BookStockException("Cannot reduce stock to " + newTotalStock + ". " + rentedCount + " books are currently rented out.");
+        }
+
+        log.info("Stock adjusted. Old: {}, New: {}, Available Diff: {}", book.getStock(), newTotalStock, stockDifference);
+
+        book.setStock(newTotalStock);
+        book.setAvailableStock(newAvailable);
     }
 }

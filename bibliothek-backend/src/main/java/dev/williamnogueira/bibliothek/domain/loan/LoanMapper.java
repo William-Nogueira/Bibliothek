@@ -1,13 +1,12 @@
-package dev.williamnogueira.bibliothek.domain.loan.mapper;
+package dev.williamnogueira.bibliothek.domain.loan;
 
-import dev.williamnogueira.bibliothek.domain.loan.LoanEntity;
 import dev.williamnogueira.bibliothek.domain.loan.dto.LoanResponseDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class LoanMapper {
+class LoanMapper {
 
-    public static LoanResponseDto toDto(LoanEntity entity) {
+    static LoanResponseDto toDto(LoanEntity entity) {
         return new LoanResponseDto(
                 entity.getId(),
                 entity.getBook().getTitle(),

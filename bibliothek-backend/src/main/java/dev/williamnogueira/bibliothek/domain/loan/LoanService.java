@@ -5,7 +5,6 @@ import dev.williamnogueira.bibliothek.domain.loan.dto.LoanResponseDto;
 import dev.williamnogueira.bibliothek.domain.loan.exceptions.BookNotAvailableException;
 import dev.williamnogueira.bibliothek.domain.loan.exceptions.InvalidLoanStateException;
 import dev.williamnogueira.bibliothek.domain.loan.exceptions.LoanNotFoundException;
-import dev.williamnogueira.bibliothek.domain.loan.mapper.LoanMapper;
 import dev.williamnogueira.bibliothek.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -29,7 +29,7 @@ public class LoanService {
     private final BookService bookService;
     private final UserService userService;
 
-    private static final BigDecimal FINE_PER_DAY = new BigDecimal("1.00");
+    private static final BigDecimal FINE_PER_DAY = BigDecimal.valueOf(1.50);
     private static final int LOAN_DAYS = 14;
 
     @Transactional(readOnly = true)
@@ -46,7 +46,7 @@ public class LoanService {
     @Transactional
     public void requestLoan(UUID bookId, String userRegistration) {
         log.info("Loan request initiated. User: {}, Book: {}", userRegistration, bookId);
-        var book = bookService.getEntity(bookId);
+        var book = bookService.findBookWithPessimisticLock(bookId);
 
         if (book.getAvailableStock() <= 0) {
             throw new BookNotAvailableException("No stock available for this book");
@@ -64,7 +64,7 @@ public class LoanService {
 
         book.setAvailableStock(book.getAvailableStock() - 1);
 
-        var savedLoan = loanRepository.saveAndFlush(loan);
+        var savedLoan = loanRepository.save(loan);
         log.info("Loan requested successfully. Loan ID: {}", savedLoan.getId());
     }
 
@@ -90,15 +90,16 @@ public class LoanService {
         log.info("Attempting to finish Loan ID: {}", loanId);
         var loan = getEntity(loanId);
 
-        var book = loan.getBook();
-        book.setAvailableStock(book.getAvailableStock() + 1);
+        bookService.incrementAvailableStock(loan.getBook());
 
-        if (Instant.now().isAfter(loan.getReturnDate())) {
-            long daysLate = Duration.between(loan.getReturnDate(), Instant.now()).toDays();
+        var expectedDate = loan.getReturnDate().atZone(ZoneId.systemDefault()).toLocalDate();
+        var actualDate = LocalDate.now();
+
+        if (actualDate.isAfter(expectedDate)) {
+            long daysLate = ChronoUnit.DAYS.between(expectedDate, actualDate);
             var calculatedFine = FINE_PER_DAY.multiply(BigDecimal.valueOf(daysLate));
             loan.setFine(calculatedFine);
-
-            log.info("Loan ID {} is late by {} days. Fine applied: {}", loanId, daysLate, calculatedFine);
+            log.info("Loan ID {} is late by {} days. Fine: {}", loanId, daysLate, calculatedFine);
         }
 
         loan.setStatus(LoanStatus.FINISHED);
@@ -115,7 +116,7 @@ public class LoanService {
             throw new InvalidLoanStateException("Cannot renew a loan that is Pending or Finished");
         }
 
-        var newReturnDate = loan.getReturnDate().plus(14, ChronoUnit.DAYS);
+        var newReturnDate = loan.getReturnDate().plus(LOAN_DAYS, ChronoUnit.DAYS);
         loan.setReturnDate(newReturnDate);
 
         loan.setStatus(LoanStatus.RENEWED);

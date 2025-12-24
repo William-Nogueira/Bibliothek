@@ -3,6 +3,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,8 @@ export class LoginComponent {
 
   errorMessage: string = '';
   isLoading = false;
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -32,7 +35,7 @@ export class LoginComponent {
     this.translate.use(savedLang);
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -43,40 +46,47 @@ export class LoginComponent {
 
     const { registration, password } = this.loginForm.value;
 
-    this.authService.login(registration, password).subscribe({
-      next: (response) => {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('registration', registration);
-        this.getUserInfo(registration);
-      },
-      error: (err) => {
-        console.error(err);
-        this.errorMessage = 'LOGIN.ERROR_INVALID';
-        this.isLoading = false;
-      },
-    });
+    this.authService
+      .login(registration, password)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('registration', registration);
+          this.getUserInfo(registration);
+        },
+        error: (err) => {
+          console.error(err);
+          this.errorMessage = 'LOGIN.ERROR_INVALID';
+          this.isLoading = false;
+        },
+      });
   }
 
-  switchLanguage(lang: string) {
+  switchLanguage(lang: string): void {
     this.currentLang = lang;
     this.translate.use(lang);
     localStorage.setItem('lang', lang);
   }
 
-  private getUserInfo(registration: string) {
-    this.authService.getUserInfo(registration).subscribe({
-      next: (userInfo) => {
-        localStorage.setItem('name', userInfo.name);
-        localStorage.setItem('profilePic', userInfo.profilePic);
-        this.router.navigate(['/platform']);
-      },
-      error: () => {
-        this.errorMessage = 'LOGIN.ERROR_UNEXPECTED';
-        this.isLoading = false;
-      },
-      complete: () => {
-        this.isLoading = false;
-      },
-    });
+  private getUserInfo(registration: string): void {
+    this.authService
+      .getUserInfo(registration)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (userInfo) => {
+          localStorage.setItem('name', userInfo.name);
+          localStorage.setItem('profilePic', userInfo.profilePic);
+          this.router.navigate(['/platform']);
+        },
+        error: (err) => {
+          console.error(err);
+          this.errorMessage = 'LOGIN.ERROR_UNEXPECTED';
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
   }
 }

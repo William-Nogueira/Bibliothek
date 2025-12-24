@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { BookService } from '../../../../core/services/book.service';
 import { Book } from 'src/app/core/models/book';
 import { Page } from 'src/app/core/models/page';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-book-list',
@@ -15,10 +16,12 @@ export class BookListComponent implements OnChanges {
   books?: Book[];
 
   currentPage = 0;
-  readonly pageSize = 8;
   totalPages = 1;
+  readonly pageSize = 8;
 
   loading = true;
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(private readonly bookService: BookService) {
     this.getFilteredBooks();
@@ -36,6 +39,7 @@ export class BookListComponent implements OnChanges {
 
     this.bookService
       .filterBooks(this.query, this.currentPage, this.pageSize)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (pagedResult) => {
           this.pagedResult = pagedResult;
@@ -51,14 +55,14 @@ export class BookListComponent implements OnChanges {
       });
   }
 
-  nextPage() {
+  nextPage(): void {
     if (this.currentPage < this.totalPages - 1) {
       this.currentPage++;
       this.getFilteredBooks();
     }
   }
 
-  prevPage() {
+  prevPage(): void {
     if (this.currentPage > 0) {
       this.currentPage--;
       this.getFilteredBooks();

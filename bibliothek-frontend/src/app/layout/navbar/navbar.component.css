@@ -108,12 +108,12 @@ a {
   background-color: #f1f1f1;
 }
 
-svg {
+.icon {
   width: 20px;
   height: 20px;
 }
 
-.svg-link {
+.icon-link {
   padding-right: 5px;
 }
 
