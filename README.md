@@ -1,9 +1,11 @@
 # Bibliothek - Library Management System
 
-![Angular 16](https://img.shields.io/badge/Angular-16-DD0031?logo=angular&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4-6DB33F?logo=spring&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1?logo=postgresql&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
+![Java 17](https://img.shields.io/badge/Java-17-F89820?style=flat&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4-6DB33F?style=flat&logo=spring-boot&logoColor=white)
+![Angular 16](https://img.shields.io/badge/Angular-16-DD0031?style=flat&logo=angular&logoColor=white)
+![TypeScript 5.0](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat&logo=typescript&logoColor=white)
+![PostgreSQL 17](https://img.shields.io/badge/PostgreSQL-17-4169E1?style=flat&logo=postgresql&logoColor=white)
+![Docker Compose](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)
 
 Bibliothek is a **Fullstack Monolith** designed for managing public school libraries. It provides **structured loan control**, **Role-Based Access Control (RBAC)**, and **Internationalization**, with an emphasis on clean code and type safety.
 
@@ -18,7 +20,7 @@ Bibliothek is a **Fullstack Monolith** designed for managing public school libra
 ## 🏗 Architecture & Design
 
 ### Backend (Spring Boot 3.4)
-*   **Layered Architecture:** strict separation of concerns (Controllers, Domain Services, Infrastructure).
+*   **Layered Architecture:** Strict separation of concerns (Controllers, Domain Services, Infrastructure).
 *   **Security:** Implements **Spring Security** with stateless **JWT Authentication**.
 *   **Data Integrity:** Uses `@Transactional` and `@Lock` to ensure atomicity during complex loan operations (stock checks + user validation + loan creation).
 *   **Persistence:** PostgreSQL managed via **Flyway** migrations for consistent schema evolution.
